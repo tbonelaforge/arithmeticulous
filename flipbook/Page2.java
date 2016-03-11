@@ -1,10 +1,12 @@
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.SequentialGroup;
 import javax.swing.GroupLayout.ParallelGroup;
 import javax.swing.WindowConstants;
+import javax.swing.BorderFactory;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -12,50 +14,43 @@ import java.awt.Container;
 import java.awt.EventQueue;
 import java.awt.GridBagLayout;
 
-public class Page1 extends JFrame {
+public class Page2 extends JFrame {
     private JLabel jLabel1;
     private JLabel jLabel2;
     private JLabel jLabel3;
-    private JLabel jLabel4;
-    private JLabel jLabel5;
-
+    private JTextField jTextField1;
+    
+    public Page2() {
+        setTitle("Page 2");
+        initComponents();
+    }
+    
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
-                Page1 page1 = new Page1();
-                page1.setSize(400, 300);
-                page1.setVisible(true);
-                page1.printSizes();
+                Page2 page2 = new Page2();
+                page2.setSize(400, 300);
+                page2.setVisible(true);
+                page2.printSizes();
             }
         });
     }
-    
-    
-    public Page1() {
-        setTitle("Page 1");
-        initComponents();
-    }
-
 
     public void printSizes() {
-        int x = jLabel3.getWidth() + jLabel4.getWidth() + jLabel5.getWidth();
-        int y = jLabel3.getHeight();
-        y = Math.max(y, jLabel4.getHeight());
-        y = Math.max(y, jLabel5.getHeight());
+        int x = jTextField1.getWidth();
+        int y = jTextField1.getHeight();
         System.out.printf("The sizes are: %d X %d%n", x, y);
+        System.out.printf("The textfield has a border object:\n");
+        System.out.println(jTextField1.getBorder());
     }
-
+    
     private void initComponents() {
         jLabel1 = new JLabel();
         jLabel1.setText("5");
         jLabel2 = new JLabel();
         jLabel2.setText("+");
-        jLabel3 = new JLabel();
-        jLabel3.setText("3");
-        jLabel4 = new JLabel();
-        jLabel4.setText("*");
-        jLabel5 = new JLabel();
-        jLabel5.setText("2");
+        jTextField1 = new JTextField();
+        jTextField1.setBorder(BorderFactory.createEmptyBorder());
         Container contentPane = getContentPane();
         JPanel jPanel = new JPanel();
         GroupLayout groupLayout = new GroupLayout(jPanel);
@@ -73,9 +68,7 @@ public class Page1 extends JFrame {
         SequentialGroup sGroup1 = groupLayout.createSequentialGroup()
             .addComponent(jLabel1)
             .addComponent(jLabel2)
-            .addComponent(jLabel3)
-            .addComponent(jLabel4)
-            .addComponent(jLabel5);
+                        .addComponent(jTextField1, 22, 22, 22);
         groupLayout.setHorizontalGroup(sGroup1);
     }
 
@@ -83,9 +76,7 @@ public class Page1 extends JFrame {
         ParallelGroup pGroup1 = groupLayout.createParallelGroup()
             .addComponent(jLabel1)
             .addComponent(jLabel2)
-            .addComponent(jLabel3)
-            .addComponent(jLabel4)
-            .addComponent(jLabel5);
+                        .addComponent(jTextField1, 16, 16, 16);
         groupLayout.setVerticalGroup(pGroup1);
     }
 }
