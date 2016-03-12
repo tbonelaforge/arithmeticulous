@@ -1,4 +1,3 @@
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -6,7 +5,6 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.SequentialGroup;
 import javax.swing.GroupLayout.ParallelGroup;
 import javax.swing.WindowConstants;
-import javax.swing.BorderFactory;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -14,40 +12,35 @@ import java.awt.Cursor;
 import java.awt.Container;
 import java.awt.EventQueue;
 import java.awt.GridBagLayout;
-import java.awt.Insets;
 
-public class Page1 extends JFrame {
+public class Page3 extends JFrame {
     private JLabel jLabel1;
-        private JLabel jLabel2;
-    //private JButton jButton2;
+    private JLabel jLabel2;
     private JLabel jLabel3;
-    private JLabel jLabel4;
-    //private JButton jButton4;
-    private JLabel jLabel5;
-
+    
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
-                Page1 page1 = new Page1();
-                page1.setSize(400, 300);
-                page1.setVisible(true);
-                page1.printSizes();
+                Page3 page3 = new Page3();
+                page3.setSize(400, 300);
+                page3.setVisible(true);
+                page3.printSizes();
             }
         });
     }
     
     
-    public Page1() {
-        setTitle("Page 1");
+    public Page3() {
+        setTitle("Page 3");
         initComponents();
     }
 
 
     public void printSizes() {
-        int x = jLabel3.getWidth() + jLabel4.getWidth() + jLabel5.getWidth();
-        int y = jLabel3.getHeight();
-        y = Math.max(y, jLabel4.getHeight());
-        y = Math.max(y, jLabel5.getHeight());
+        int x = jLabel1.getWidth() + jLabel2.getWidth() + jLabel3.getWidth();
+        int y = jLabel1.getHeight();
+        y = Math.max(y, jLabel2.getHeight());
+        y = Math.max(y, jLabel3.getHeight());
         System.out.printf("The sizes are: %d X %d%n", x, y);
     }
 
@@ -59,13 +52,7 @@ public class Page1 extends JFrame {
         jLabel2.setForeground(new Color(125, 0, 255));
         jLabel2.setCursor(new Cursor(Cursor.HAND_CURSOR));
         jLabel3 = new JLabel();
-        jLabel3.setText("3");
-        jLabel4 = new JLabel();
-        jLabel4.setText("*");
-        jLabel4.setForeground(new Color(125, 0, 255));
-        jLabel4.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        jLabel5 = new JLabel();
-        jLabel5.setText("2");
+        jLabel3.setText("6");
         Container contentPane = getContentPane();
         JPanel jPanel = new JPanel();
         GroupLayout groupLayout = new GroupLayout(jPanel);
@@ -83,9 +70,7 @@ public class Page1 extends JFrame {
         SequentialGroup sGroup1 = groupLayout.createSequentialGroup()
             .addComponent(jLabel1)
             .addComponent(jLabel2)
-            .addComponent(jLabel3)
-            .addComponent(jLabel4)
-            .addComponent(jLabel5);
+            .addComponent(jLabel3);
         groupLayout.setHorizontalGroup(sGroup1);
     }
 
@@ -93,9 +78,7 @@ public class Page1 extends JFrame {
         ParallelGroup pGroup1 = groupLayout.createParallelGroup()
             .addComponent(jLabel1)
             .addComponent(jLabel2)
-            .addComponent(jLabel3)
-            .addComponent(jLabel4)
-            .addComponent(jLabel5);
+            .addComponent(jLabel3);
         groupLayout.setVerticalGroup(pGroup1);
     }
 }

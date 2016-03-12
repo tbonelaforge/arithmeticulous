@@ -1,8 +1,12 @@
+import javax.swing.InputMap;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.GroupLayout;
+import javax.swing.text.DefaultCaret;
+import javax.swing.text.Highlighter;
+import javax.swing.text.JTextComponent;
 import javax.swing.GroupLayout.SequentialGroup;
 import javax.swing.GroupLayout.ParallelGroup;
 import javax.swing.WindowConstants;
@@ -12,6 +16,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.EventQueue;
+import java.awt.Graphics;
+import java.awt.Shape;
 import java.awt.GridBagLayout;
 
 public class Page2 extends JFrame {
@@ -51,6 +57,7 @@ public class Page2 extends JFrame {
         jLabel2.setText("+");
         jTextField1 = new JTextField();
         jTextField1.setBorder(BorderFactory.createEmptyBorder());
+        jTextField1.setText("3*2");
         Container contentPane = getContentPane();
         JPanel jPanel = new JPanel();
         GroupLayout groupLayout = new GroupLayout(jPanel);
@@ -79,4 +86,5 @@ public class Page2 extends JFrame {
                         .addComponent(jTextField1, 16, 16, 16);
         groupLayout.setVerticalGroup(pGroup1);
     }
+    
 }

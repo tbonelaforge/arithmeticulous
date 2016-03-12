@@ -1,8 +1,12 @@
-import javax.swing.JButton;
+import javax.swing.InputMap;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.GroupLayout;
+import javax.swing.text.DefaultCaret;
+import javax.swing.text.Highlighter;
+import javax.swing.text.JTextComponent;
 import javax.swing.GroupLayout.SequentialGroup;
 import javax.swing.GroupLayout.ParallelGroup;
 import javax.swing.WindowConstants;
@@ -10,62 +14,48 @@ import javax.swing.BorderFactory;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.Container;
 import java.awt.EventQueue;
+import java.awt.Graphics;
+import java.awt.Shape;
 import java.awt.GridBagLayout;
-import java.awt.Insets;
 
-public class Page1 extends JFrame {
+public class Page4 extends JFrame {
     private JLabel jLabel1;
-        private JLabel jLabel2;
-    //private JButton jButton2;
+    private JLabel jLabel2;
     private JLabel jLabel3;
-    private JLabel jLabel4;
-    //private JButton jButton4;
-    private JLabel jLabel5;
-
+    private JTextField jTextField1;
+    
+    public Page4() {
+        setTitle("Page 4");
+        initComponents();
+    }
+    
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
-                Page1 page1 = new Page1();
-                page1.setSize(400, 300);
-                page1.setVisible(true);
-                page1.printSizes();
+                Page4 page4 = new Page4();
+                page4.setSize(400, 300);
+                page4.setVisible(true);
+                page4.printSizes();
             }
         });
     }
-    
-    
-    public Page1() {
-        setTitle("Page 1");
-        initComponents();
-    }
-
 
     public void printSizes() {
-        int x = jLabel3.getWidth() + jLabel4.getWidth() + jLabel5.getWidth();
-        int y = jLabel3.getHeight();
-        y = Math.max(y, jLabel4.getHeight());
-        y = Math.max(y, jLabel5.getHeight());
+        /*
+        int x = jTextField1.getWidth();
+        int y = jTextField1.getHeight();
         System.out.printf("The sizes are: %d X %d%n", x, y);
+        System.out.printf("The textfield has a border object:\n");
+        System.out.println(jTextField1.getBorder());
+        */
     }
-
+    
     private void initComponents() {
-        jLabel1 = new JLabel();
-        jLabel1.setText("5");
-        jLabel2 = new JLabel();
-        jLabel2.setText("+");
-        jLabel2.setForeground(new Color(125, 0, 255));
-        jLabel2.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        jLabel3 = new JLabel();
-        jLabel3.setText("3");
-        jLabel4 = new JLabel();
-        jLabel4.setText("*");
-        jLabel4.setForeground(new Color(125, 0, 255));
-        jLabel4.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        jLabel5 = new JLabel();
-        jLabel5.setText("2");
+        jTextField1 = new JTextField();
+        jTextField1.setBorder(BorderFactory.createEmptyBorder());
+        jTextField1.setText("5+6");
         Container contentPane = getContentPane();
         JPanel jPanel = new JPanel();
         GroupLayout groupLayout = new GroupLayout(jPanel);
@@ -81,21 +71,14 @@ public class Page1 extends JFrame {
 
     private void setHorizontalLayout(GroupLayout groupLayout) {
         SequentialGroup sGroup1 = groupLayout.createSequentialGroup()
-            .addComponent(jLabel1)
-            .addComponent(jLabel2)
-            .addComponent(jLabel3)
-            .addComponent(jLabel4)
-            .addComponent(jLabel5);
+            .addComponent(jTextField1, 26, 26, 26);
         groupLayout.setHorizontalGroup(sGroup1);
     }
 
     private void setVerticalLayout(GroupLayout groupLayout) {
         ParallelGroup pGroup1 = groupLayout.createParallelGroup()
-            .addComponent(jLabel1)
-            .addComponent(jLabel2)
-            .addComponent(jLabel3)
-            .addComponent(jLabel4)
-            .addComponent(jLabel5);
+            .addComponent(jTextField1, 16, 16, 16);
         groupLayout.setVerticalGroup(pGroup1);
     }
+    
 }
