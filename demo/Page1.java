@@ -17,40 +17,18 @@ import java.awt.Font;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
-public class Page1 extends JFrame {
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+//public class Page1 extends JPanel {
+public class Page1 extends Page {
     private JLabel jLabel1;
     private JLabel jLabel2;
     private JLabel jLabel3;
     private JLabel jLabel4;
     private JLabel jLabel5;
 
-    public static void main(String[] args) {
-        EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                Page1 page1 = new Page1();
-                page1.setSize(400, 300);
-                page1.setVisible(true);
-                page1.printSizes();
-            }
-        });
-    }
-    
-    
     public Page1() {
-        setTitle("Page 1");
-        initComponents();
-    }
-
-
-    public void printSizes() {
-        int x = jLabel3.getWidth() + jLabel4.getWidth() + jLabel5.getWidth();
-        int y = jLabel3.getHeight();
-        y = Math.max(y, jLabel4.getHeight());
-        y = Math.max(y, jLabel5.getHeight());
-        System.out.printf("The sizes are: %d X %d%n", x, y);
-    }
-
-    private void initComponents() {
         jLabel1 = new JLabel();
         Font labelFont = jLabel1.getFont();
         int labelFontStyle = labelFont.getStyle();
@@ -58,13 +36,9 @@ public class Page1 extends JFrame {
         String labelFontName = labelFont.getName();
         jLabel1.setText("5");
         jLabel1.setFont(new Font(labelFontName, labelFontStyle, 2 * labelFontSize));
-        System.out.println("The current FONT for jLabel1 is:\n");
-        System.out.println(jLabel1.getFont());
         jLabel2 = new JLabel();
         jLabel2.setText("+");
         jLabel2.setFont(new Font(labelFontName, labelFontStyle, 2 * labelFontSize));
-        jLabel2.setForeground(new Color(200, 0, 255));
-        jLabel2.setCursor(new Cursor(Cursor.HAND_CURSOR));
         jLabel3 = new JLabel();
         jLabel3.setText("3");
         jLabel3.setFont(new Font(labelFontName, labelFontStyle, 2 * labelFontSize));
@@ -76,17 +50,12 @@ public class Page1 extends JFrame {
         jLabel5 = new JLabel();
         jLabel5.setText("2");
         jLabel5.setFont(new Font(labelFontName, labelFontStyle, 2 * labelFontSize));
-        Container contentPane = getContentPane();
-        JPanel jPanel = new JPanel();
-        GroupLayout groupLayout = new GroupLayout(jPanel);
-        jPanel.setLayout(groupLayout);
+        GroupLayout groupLayout = new GroupLayout(this);
+        this.setLayout(groupLayout);
         groupLayout.setAutoCreateGaps(false);
         groupLayout.setAutoCreateContainerGaps(false);
         setHorizontalLayout(groupLayout);
         setVerticalLayout(groupLayout);
-        contentPane.setLayout(new GridBagLayout());
-        contentPane.add(jPanel);
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
 
     private void setHorizontalLayout(GroupLayout groupLayout) {
@@ -107,5 +76,26 @@ public class Page1 extends JFrame {
             .addComponent(jLabel4)
             .addComponent(jLabel5);
         groupLayout.setVerticalGroup(pGroup1);
+    }
+
+    @Override
+    public void initMouseListener(Runnable nextPage) {
+        if (nextPage != null) {
+            jLabel4.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent mouseEvent) {
+                    System.out.println(jLabel4.isFocusOwner());
+                    nextPage.run();
+                }
+            });
+        }
+    }
+
+    public int getTextFieldWidth() {
+        return jLabel3.getWidth() + jLabel4.getWidth() + jLabel5.getWidth();
+    }
+    
+    public void cleanUp() {
+        jLabel4.setEnabled(false);
     }
 }
