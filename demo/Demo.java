@@ -10,8 +10,8 @@ import javax.swing.WindowConstants;
 
 
 public class Demo extends JFrame {
-    private Page1 page1;
-    private Page2 page2;
+    private Page page1;
+    private Page page2;
     private Container contentPane;
     private int currentPage;
 
@@ -29,12 +29,7 @@ public class Demo extends JFrame {
         contentPane.setLayout(new GridBagLayout());
         setSize(400, 300);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        page1 = new Page1();
-        page1.initMouseListener(new Runnable() {
-            public void run() {
-                nextPage();
-            }
-        });
+        page1 = initializeNewPage(new Page1());
         show(page1, "Page 1");
         currentPage = 1;
     }
@@ -53,11 +48,39 @@ public class Demo extends JFrame {
         switch (currentPage) {
         case 1:
             page1.cleanUp();
-            page2 = new Page2(page1.getTextFieldWidth());
+            page2 = initializeNewPage(new Page2(page1.getTextFieldWidth()));
             show(page2, "Page2");
+            currentPage = 2;
             break;
         default:
             System.out.println("Inside nextPage, in the default case.\n");
         }
+    }
+
+    private void previousPage() {
+        switch (currentPage) {
+        case 2:
+            page2.cleanUp();
+            page1 = initializeNewPage(new Page1());
+            show(page1, "Page1");
+            currentPage = 1;
+            break;
+        default:
+            System.out.println("Inside previousPage, nothing to go back to!\n");
+        }
+    }
+
+    private Page initializeNewPage(Page page) {
+        page.setForwardHandler(new Runnable() {
+            public void run() {
+                nextPage();
+            }
+        });
+        page.setBackwardHandler(new Runnable() {
+            public void run() {
+                previousPage();
+            }
+        });
+        return page;
     }
 }

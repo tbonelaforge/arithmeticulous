@@ -27,7 +27,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.FocusEvent;
 
-public class Page2 extends Page implements FocusListener {
+public class Page2 extends Page implements FocusListener, ActionListener {
     private JLabel jLabel1;
     private JLabel jLabel2;
     private JTextField jTextField1;
@@ -52,6 +52,7 @@ public class Page2 extends Page implements FocusListener {
         jTextField1.setBorder(BorderFactory.createEmptyBorder());
         jTextField1.setFont(new Font(labelFontName, labelFontStyle, 2 * labelFontSize));
         jTextField1.addFocusListener(this);
+        jTextField1.addActionListener(this);
         GroupLayout groupLayout = new GroupLayout(this);
         this.setLayout(groupLayout);
         groupLayout.setAutoCreateGaps(false);
@@ -91,4 +92,18 @@ public class Page2 extends Page implements FocusListener {
     }
 
     public void focusLost(FocusEvent focusEvent) {}
+
+    public void actionPerformed(ActionEvent actionEvent) {
+        System.out.println("Inside Page2.actionPerformed, got called\n");
+        System.out.println("Inside Page2.actionPerformed, the value of the text is:\n");
+        System.out.println(jTextField1.getText());
+        if (jTextField1.getText().equals("6")) {
+            System.out.println("CORRECT!!! (need to move to page 3)\n");
+        } else {
+            System.out.println("INCORRECT!!! (need to move back to page1)\n");
+            if (backwardHandler != null) {
+                backwardHandler.run();
+            }
+        }
+    }
 }

@@ -20,7 +20,6 @@ import java.awt.Insets;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-//public class Page1 extends JPanel {
 public class Page1 extends Page {
     private JLabel jLabel1;
     private JLabel jLabel2;
@@ -47,6 +46,14 @@ public class Page1 extends Page {
         jLabel4.setFont(new Font(labelFontName, labelFontStyle, 2 * labelFontSize));
         jLabel4.setForeground(new Color(200, 0, 255));
         jLabel4.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        jLabel4.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                if (forwardHandler != null) {
+                    forwardHandler.run();
+                }
+            }
+        });
         jLabel5 = new JLabel();
         jLabel5.setText("2");
         jLabel5.setFont(new Font(labelFontName, labelFontStyle, 2 * labelFontSize));
@@ -79,18 +86,6 @@ public class Page1 extends Page {
     }
 
     @Override
-    public void initMouseListener(Runnable nextPage) {
-        if (nextPage != null) {
-            jLabel4.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent mouseEvent) {
-                    System.out.println(jLabel4.isFocusOwner());
-                    nextPage.run();
-                }
-            });
-        }
-    }
-
     public int getTextFieldWidth() {
         return jLabel3.getWidth() + jLabel4.getWidth() + jLabel5.getWidth();
     }
