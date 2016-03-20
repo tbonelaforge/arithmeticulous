@@ -12,6 +12,9 @@ import javax.swing.WindowConstants;
 public class Demo extends JFrame {
     private Page page1;
     private Page page2;
+    private Page page3;
+    private Page page4;
+    private Page page5;
     private Container contentPane;
     private int currentPage;
 
@@ -47,11 +50,28 @@ public class Demo extends JFrame {
     private void nextPage() {
         switch (currentPage) {
         case 1:
-            page1.cleanUp();
             page2 = initializeNewPage(new Page2(page1.getTextFieldWidth()));
+            page1.cleanUp();
             show(page2, "Page2");
             currentPage = 2;
             break;
+        case 2:
+            page2.cleanUp();
+            page3 = initializeNewPage(new Page3());
+            show(page3, "Page3");
+            currentPage = 3;
+            break;
+        case 3:
+            page4 = initializeNewPage(new Page4(page3.getTextFieldWidth()));
+            page3.cleanUp();
+            show(page4, "Page4");
+            currentPage = 4;
+            break;
+        case 4:
+            page5 = initializeNewPage(new Page5());
+            page4.cleanUp();
+            show(page5, "Page5");
+            currentPage = 5;
         default:
             System.out.println("Inside nextPage, in the default case.\n");
         }
@@ -65,6 +85,11 @@ public class Demo extends JFrame {
             show(page1, "Page1");
             currentPage = 1;
             break;
+        case 4:
+            page4.cleanUp();
+            page3 = initializeNewPage(new Page3());
+            show(page3, "Page3");
+            currentPage = 3;
         default:
             System.out.println("Inside previousPage, nothing to go back to!\n");
         }
