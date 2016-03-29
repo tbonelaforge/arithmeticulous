@@ -1,3 +1,5 @@
+package model;
+
 public class NodeTest {
     public static void main(String[] args) {
         Node node1 = new Natural(1);
@@ -5,6 +7,7 @@ public class NodeTest {
         Node node2 = new Operator("*");
         node2.setLeftChild(node1);
         node2.setRightChild(node3);
+        node2.setEditMode(EditMode.EDITABLE);
         System.out.println("Just constructed test node:<br />\n");
         node2.printAsHTML();
     }
