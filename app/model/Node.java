@@ -3,9 +3,9 @@ package model;
 public class Node {
     private Node leftChild;
     private Node rightChild;
-    private EditMode editMode = EditMode.READ_ONLY;
+    //    private EditMode editMode = EditMode.READ_ONLY;
 
-    protected static String dataTemplate = "%s<br />%nEdit Mode: %s";
+    protected static String dataTemplate = "%s";
 
     public Node getLeftChild() {
         return leftChild;
@@ -22,14 +22,16 @@ public class Node {
     public void setRightChild(Node rightChild) {
         this.rightChild = rightChild;
     }
-
+    /*
     public EditMode getEditMode() {
         return editMode;
     }
-
+    */
+    /*
     public void setEditMode(EditMode editMode) {
         this.editMode = editMode;
     }
+    */
 
     public void printAsHTML() {
         String htmlString = getHTML();
@@ -50,6 +52,10 @@ public class Node {
 
     public String getData() {
         throw new RuntimeException("printData not implemented for: " + this);
+    }
+
+    public String getText() {
+        throw new RuntimeException("getText not implemented for: " + this);
     }
 
     public String getChildrenAsTableCells() {

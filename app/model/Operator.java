@@ -12,16 +12,17 @@ public class Operator extends Node {
     }
 
     public String getDataAsHTML() {
-        String editModeName = getEditMode().name();
-        String dataAsHTML = String.format(
-                                          dataTemplate,
-                                          type,
-                                          editModeName
-                                          );
+        //        String editModeName = getEditMode().name();
+        String dataAsHTML = String.format(dataTemplate, type);
         return dataAsHTML;
     }
 
     public String getData() {
         return type;
+    }
+
+    public String getText() {
+        String text = getLeftChild().getText() + type + getRightChild().getText();
+        return text;
     }
 }

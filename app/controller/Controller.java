@@ -1,10 +1,13 @@
 package controller;
 
-import model.EditMode;
+//import model.EditMode;
 import model.Node;
-import interfaces.NodeEditor;
-import interfaces.NodeReplacer;
+//import interfaces.NodeEditor;
+//import interfaces.NodeReplacer;
+import interfaces.ControllerInterface;
+import view.EditMode;
 import view.Page;
+import view.NodeLabel;
 
 import java.awt.Container;
 import java.awt.GridBagLayout;
@@ -13,25 +16,10 @@ import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
 
-public class Controller extends JFrame {
+public class Controller extends JFrame implements ControllerInterface {
     private Node model;
     private Page view;
     private Container contentPane;
-    private NodeEditor editHandler = new NodeEditor() {
-        public void edit(Node node) {
-            handleEdit(node);
-        }
-    };
-    private NodeReplacer correctHandler = new NodeReplacer() {
-        public void replace(Node node, Node replacement) {
-            handleReplacement(node, replacement);
-        }  
-    };
-    private NodeEditor incorrectHandler = new NodeEditor() {
-        public void edit(Node node) {
-            handleIncorrect(node);
-        }
-    };
 
     public void initialize(Node model) {
         this.model = model;
@@ -40,11 +28,32 @@ public class Controller extends JFrame {
         setSize(400, 300);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setTitle("Arithmetic");
-        renderView();
+        //        renderView();
+        view = createInitialView();
+        showView();
     }
 
-    private void renderView() {
-        view = generateView();
+        public void edit(NodeLabel nodeLabel) {
+        System.out.println("Inside the handleEdit function, got CALLED, about to set the edit mode on thd nodeLabel.!%n");
+        System.out.println("Before setting the editMode, the viewModel looks like:\n");
+        view.printDebug();
+        nodeLabel.setEditMode(EditMode.EDITING);
+        System.out.println("After setting the edit Mode, of that node, the viewModel looks like:\n");
+        view.printDebug();
+        System.out.println("About to render the view!!!!\n");
+        renderNewView();
+    }
+    
+    public void replace(NodeLabel nodeLabel, NodeLabel replacement) {
+        System.out.println("Inside Controller.handleReplacement, got called!\n");
+    }
+
+    public void handleIncorrect(NodeLabel nodeLabel) {
+        System.out.println("Inside Controller.handleIncorrect, got called!\n");
+    }
+
+    private void renderNewView() {
+        view = generateNewView(view);
         showView();
     }
 
@@ -57,33 +66,22 @@ public class Controller extends JFrame {
         view.whenShown();
     }
 
-    private Page generateView() {
+    private Page createInitialView() {
         Page view = new Page();
         view.initialize(model);
-        view.setEditHandler(this.editHandler);
-        view.setCorrectHandler(this.correctHandler);
-        view.setIncorrectHandler(this.incorrectHandler);
         return view;
     }
 
-    private void handleEdit(Node node) {
-        System.out.println("Inside the handleEdit function, got CALLED, about to set the edit mode on thd node.!%n");
-        System.out.println("Before setting the editMode, the model looks like:\n");
-        model.printAsHTML();
-        node.setEditMode(EditMode.EDITING);
-        System.out.println("After setting the edit Mode, of that node, the model now looks like:\n");
-        model.printAsHTML();
-        System.out.println("About to render the view!!!!\n");
-        renderView();
-        
-    }
-    
-    private void handleReplacement(Node node, Node replacement) {
-        System.out.println("Inside Controller.handleReplacement, got called!\n");
+    private Page generateNewView(Page currentView) {
+        Page view = new Page(currentView);
+        //        view.initialize(model);
+        // view.setEditHandler(this.editHandler);
+        // view.setCorrectHandler(this.correctHandler);
+        // view.setIncorrectHandler(this.incorrectHandler);
+        view.setControllerInterface(this);
+        return view;
     }
 
-    private void handleIncorrect(Node node) {
-        System.out.println("Inside Controller.handleIncorrect, got called!\n");
-    }
+
 
 }
