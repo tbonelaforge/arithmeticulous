@@ -12,7 +12,7 @@ public class NodeLabel extends JLabel implements ViewNode {
     private ViewNode rightChild;
     private EditMode editMode = EditMode.READ_ONLY;
 
-    private static String dataTemplate = "%s<br />%nEditMode: %s";
+    private static String dataTemplate = "%s<br />%nEditMode: %s<br />Type: NodeLabel";
 
     public NodeLabel(Node node) {
         this.node = node;
@@ -74,8 +74,7 @@ public class NodeLabel extends JLabel implements ViewNode {
     }
 
     private String getDataAsHTML() {
-        String dataAsHTML = String.format(
-                                          dataTemplate,
+        String dataAsHTML = String.format(dataTemplate,
                                           node.getData(),
                                           getEditMode()
                                           );

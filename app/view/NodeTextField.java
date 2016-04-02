@@ -17,7 +17,7 @@ public class NodeTextField extends JTextField implements ViewNode, FocusListener
     private ViewNode rightChild;
     private EditMode editMode = EditMode.EDITING;
     private String initialText;
-    private static String dataTemplate = "%s<br />%nEditMode: %s";
+    private static String dataTemplate = "%s<br />%nEditMode: %s<br />Type: NodeTextField";
 
     public NodeTextField(ViewNode viewNode) {
         this.node = viewNode.getNode();
@@ -56,13 +56,6 @@ public class NodeTextField extends JTextField implements ViewNode, FocusListener
         setCaret(new DefaultCaret());
         getCaret().setBlinkRate(500);
         setBorder(BorderFactory.createEmptyBorder());
-        /*
-        setFont(
-                viewNode.getFontName(),
-                viewNode.getFontStyle(),
-                viewNode.getFontSize()
-                );
-        */
         addFocusListener(this);
     }
 
@@ -72,7 +65,12 @@ public class NodeTextField extends JTextField implements ViewNode, FocusListener
     }
 
     public String getHTML() {
-        return toString();
+        //        return toString();
+        String html = String.format(dataTemplate,
+                                    getText(),
+                                    getEditMode()
+                                    );
+        return html;
     }
 
     public int computeWidth() {
@@ -85,6 +83,14 @@ public class NodeTextField extends JTextField implements ViewNode, FocusListener
 
     public void focusGained(FocusEvent focusEvent) {
         System.out.println("the text field gained focus!!!\n");
+        System.out.println("The underlying node is:\n");
+        node.printAsHTML();
+        System.out.println("The node.getText() is:\n" + node.getText());
         setText(node.getText());
+        System.out.println("After setting the text, the text is:\n");
+        System.out.println(getText());
+        selectAll();
+        System.out.println("After selecting all, the NodeTextField has Font:\n");
+        System.out.println(getFont());
     }
 }

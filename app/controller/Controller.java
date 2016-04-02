@@ -1,9 +1,6 @@
 package controller;
 
-//import model.EditMode;
 import model.Node;
-//import interfaces.NodeEditor;
-//import interfaces.NodeReplacer;
 import interfaces.ControllerInterface;
 import view.EditMode;
 import view.Page;
@@ -28,19 +25,20 @@ public class Controller extends JFrame implements ControllerInterface {
         setSize(400, 300);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setTitle("Arithmetic");
-        //        renderView();
-        view = createInitialView();
-        showView();
+        Page initialView = createInitialView();
+        showView(initialView);
     }
 
         public void edit(NodeLabel nodeLabel) {
-        System.out.println("Inside the handleEdit function, got CALLED, about to set the edit mode on thd nodeLabel.!%n");
+        System.out.println("Inside the Controller.edit function, got CALLED, about to set the edit mode on thd nodeLabel.!%n");
         System.out.println("Before setting the editMode, the viewModel looks like:\n");
         view.printDebug();
         nodeLabel.setEditMode(EditMode.EDITING);
         System.out.println("After setting the edit Mode, of that node, the viewModel looks like:\n");
         view.printDebug();
         System.out.println("About to render the view!!!!\n");
+        System.out.println("TAKE NOTE!!!!1 the size I think it should be is:\n");
+        System.out.println(nodeLabel.computeWidth());
         renderNewView();
     }
     
@@ -53,31 +51,31 @@ public class Controller extends JFrame implements ControllerInterface {
     }
 
     private void renderNewView() {
-        view = generateNewView(view);
-        showView();
+        //        view = generateNewView(view);
+        Page newView = generateNewView(view);
+        view.cleanUp();
+        showView(newView);
     }
 
-    private void showView() {
+    private void showView(Page newView) {
         contentPane.removeAll();
-        contentPane.add(view);
+        contentPane.add(newView);
         contentPane.revalidate();
         contentPane.repaint();
         setVisible(true);
-        view.whenShown();
+        newView.whenShown();
+        view = newView;
     }
 
     private Page createInitialView() {
         Page view = new Page();
-        view.initialize(model);
+        view.initializeFromNode(model);
+        view.setControllerInterface(this);
         return view;
     }
 
     private Page generateNewView(Page currentView) {
         Page view = new Page(currentView);
-        //        view.initialize(model);
-        // view.setEditHandler(this.editHandler);
-        // view.setCorrectHandler(this.correctHandler);
-        // view.setIncorrectHandler(this.incorrectHandler);
         view.setControllerInterface(this);
         return view;
     }

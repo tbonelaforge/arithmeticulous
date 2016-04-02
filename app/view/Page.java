@@ -2,7 +2,6 @@ package view;
 
 import model.Node;
 import model.Operator;
-//import model.EditMode;
 
 import interfaces.ControllerInterface;
 import interfaces.ViewNode;
@@ -22,7 +21,6 @@ import javax.swing.JPanel;
 
 
 public class Page extends JPanel {
-    //    private int textFieldWidth;
     private Font labelFont;
     private int labelFontSize;
     private int labelFontStyle;
@@ -30,11 +28,7 @@ public class Page extends JPanel {
     private GroupLayout groupLayout;
     private SequentialGroup horizontalGroup;
     private ParallelGroup verticalGroup;
-    //    private NodeEditor editHandler;
-    //    private NodeReplacer correctHandler;
-    //    private NodeEditor incorrectHandler;
     private ControllerInterface controllerInterface;
-    //    private NodeLabel rootNodeLabel;
     private ViewNode rootViewNode;
     private NodeLabel editable;
     private int editableLevel;
@@ -51,32 +45,43 @@ public class Page extends JPanel {
     }
 
     public Page(Page page) {
-        super();
-        //        initialize(page.rootNodeLabel);
-        initialize(page.rootViewNode);
+        this();
+        initializeFromViewNode(page.rootViewNode);
     }
 
-    public void initialize(Node rootNode) {
+    public void initializeFromNode(Node rootNode) {
         initializeLayout();
-        /*
-        groupLayout = new GroupLayout(this);
-        this.setLayout(groupLayout);
-        groupLayout.setAutoCreateGaps(false);
-        groupLayout.setAutoCreateContainerGaps(false);
-        horizontalGroup = groupLayout.createSequentialGroup();
-        groupLayout.setHorizontalGroup(horizontalGroup);
-        verticalGroup = groupLayout.createParallelGroup();
-        groupLayout.setVerticalGroup(verticalGroup);
-        */
-        //        rootNodeLabel = traverse(rootNode, 1);
-        rootViewNode = traverse(rootNode, 1);
+        rootViewNode = traverseNode(rootNode, 1);
+        if (editable != null) {
+            editable.setEditMode(EditMode.EDITABLE);
+            editable.setForeground(clickableColor);
+            editable.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            editable.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent mouseEvent) {
+                    System.out.println("Inside mouseClicked, got caleld with mouseEvent!!!!:\n");
+                    System.out.println(mouseEvent);
+                    System.out.println("It has source!!!!111\n");
+                    System.out.println(mouseEvent.getSource());
+                    if (controllerInterface != null) {
+                        System.out.println("Inside mouseClicked, the controllerInterface is not null, about to call controllerInterface.edit\n");
+                        NodeLabel source = (NodeLabel) mouseEvent.getSource();
+                        controllerInterface.edit(source);
+                    } else {
+                        System.out.println("Inside mouseClicked, the controllerInterface is null...\n");
+                    }
+                }
+            });
+        } else {
+            System.out.println("There is no editable node...\n");
+        }
     }
-    
-    //    private void initialize(NodeLabel rootNodeLabel) {
-    private void initialize(ViewNode oldRootViewNode) {
+
+    private void initializeFromViewNode(ViewNode oldRootViewNode) {
         initializeLayout();
-        //        rootNodeLabel = traverse(rootNodeLabel);
-        rootViewNode = traverse(oldRootViewNode);
+        rootViewNode = traverseViewNode(oldRootViewNode);
+        System.out.println("Inside initializeFromViewNode, after traversing, the rootViewNode now looks like:\n");
+        rootViewNode.printAsHTML();
     }
 
 
@@ -91,44 +96,30 @@ public class Page extends JPanel {
         groupLayout.setVerticalGroup(verticalGroup);
     }
 
-    private NodeLabel traverse(Node node, int level) {
-        //        NodeLabel editable;
+    private NodeLabel traverseNode(Node node, int level) {
 
         // In-order traversal for horizontal ordering.
         if (node == null) {
             return null;
         }
-        NodeLabel leftNodeLabel = traverse(node.getLeftChild(), level + 1);
+        NodeLabel leftNodeLabel = traverseNode(node.getLeftChild(), level + 1);
         NodeLabel thisNodeLabel = createNodeLabel(node);
         horizontalGroup.addComponent(thisNodeLabel);
         verticalGroup.addComponent(thisNodeLabel);
+
+        // Find the "max" (the first, lowest level operator)
         if (node instanceof Operator) {
             if (level > editableLevel) {
                 editable = thisNodeLabel;
             }
         }
-        NodeLabel rightNodeLabel = traverse(node.getRightChild(), level + 1);
+        NodeLabel rightNodeLabel = traverseNode(node.getRightChild(), level + 1);
         thisNodeLabel.setLeftChild(leftNodeLabel);
         thisNodeLabel.setRightChild(rightNodeLabel);
-        if (level == 1) {
-            editable.setEditMode(EditMode.EDITABLE);
-            editable.setForeground(clickableColor);
-            editable.setCursor(new Cursor(Cursor.HAND_CURSOR));
-            editable.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent mouseEvent) {
-                    if (controllerInterface != null) {
-                        NodeLabel source = (NodeLabel) mouseEvent.getSource();
-                        controllerInterface.edit(source);
-                    }
-                }
-            });
-        }
         return thisNodeLabel;
     }
 
-    //    private NodeLabel traverse(NodeLabel nodeLabel, int level) {
-    private ViewNode traverse(ViewNode viewNode) {
+    private ViewNode traverseViewNode(ViewNode viewNode) {
 
         // In-order traversal for horizontal ordering.
         if (viewNode == null) {
@@ -136,15 +127,20 @@ public class Page extends JPanel {
         }
         ViewNode thisViewNode = createViewNode(viewNode);
         if (thisViewNode instanceof NodeTextField) {
+            int width = viewNode.computeWidth();
             textField = (NodeTextField) thisViewNode;
-            horizontalGroup.addComponent((Component) thisViewNode);
+            horizontalGroup.addComponent((Component) thisViewNode,
+                                         width,
+                                         width,
+                                         width
+                                         );
             verticalGroup.addComponent((Component) thisViewNode);
             return thisViewNode;
         }
-        ViewNode leftViewNode = traverse(viewNode.getLeftChild());
+        ViewNode leftViewNode = traverseViewNode(viewNode.getLeftChild());
         horizontalGroup.addComponent((Component) thisViewNode);
         verticalGroup.addComponent((Component) thisViewNode);
-        ViewNode rightViewNode = traverse(viewNode.getRightChild());
+        ViewNode rightViewNode = traverseViewNode(viewNode.getRightChild());
         thisViewNode.setLeftChild(leftViewNode);
         thisViewNode.setRightChild(rightViewNode);
         return thisViewNode;
@@ -154,35 +150,12 @@ public class Page extends JPanel {
     private NodeLabel createNodeLabel(Node node) {
         System.out.println("Inside createComponent, got called on node..\n");
         NodeLabel nodeLabel = new NodeLabel(node);
-        //        jLabel.setFont(new Font(
         nodeLabel.setFont(new Font(
                                 labelFontName,
                                 labelFontStyle,
                                 labelFontSize
                                 )
                        );
-        /*
-        if (node.getEditMode() == EditMode.EDITABLE) {
-            //            jLabel.setForeground(new Color(200, 0, 255));
-            nodeLabel.setForeground(new Color(200, 0, 255));
-            //            jLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
-            nodeLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
-            //            jLabel.addMouseListener(new MouseAdapter() {
-            nodeLabel.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent mouseEvent) {
-                    System.out.println("Inside mouseClicked function, about to do something!!!\n");
-                    NodeLabel source = (NodeLabel) mouseEvent.getSource();
-                    System.out.println("The source of the event is:\n");
-                    System.out.println(source);
-                    if (controllerInterface != null) {
-                        System.out.println("ABout to call the editHandler!\n");
-                        controllerInterface.edit(source);
-                    }
-                }
-            });
-        }
-        */
         return nodeLabel;
     }
 
@@ -193,6 +166,7 @@ public class Page extends JPanel {
             return viewNode;
         }
         NodeTextField newTextField = new NodeTextField(viewNode);
+        System.out.printf("Inside Page.createViewNode, about to setFont on the newTextField, using labelFontName %s, labelFontStyle %s, labelFontSize %d\n", labelFontName, labelFontStyle, labelFontSize);
         newTextField.setFont(new Font(labelFontName, labelFontStyle, labelFontSize));
         return newTextField;
     }
@@ -221,7 +195,11 @@ public class Page extends JPanel {
             textField.requestFocusInWindow();
         }
     }
-    public void cleanUp() {}
+    public void cleanUp() {
+        if (editable != null) {
+            editable.setEnabled(false);
+        }
+    }
     /*
     public int getTextFieldWidth() {
         return -1; // To be overridden;
