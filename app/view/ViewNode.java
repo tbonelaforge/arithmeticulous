@@ -1,36 +1,21 @@
 package view;
 
-//import interfaces.ViewNode;
-
 import model.Node;
 
 import java.awt.Component;
 
-import javax.swing.JLabel;
+public class ViewNode {
+    private ViewNode leftChild;
+    private ViewNode rightChild;
+    private EditMode editMode;
+    private Node node;
 
-//public class NodeLabel extends JLabel implements ViewNode {
-public class NodeLabel extends ViewNode {
-    //    private Node node;
-    //    private ViewNode leftChild;
-    //    private ViewNode rightChild;
-    //    private EditMode editMode = EditMode.READ_ONLY;
+    private static String htmlTemplate = "<table><tr><td colspan=\"2\" style=\"text-align:center;\">%s</td></tr><tr>%s</tr></table>";
 
-    //    private JLabel component;
-    private JLabel label;
-
-    private static String htmlDataTemplate = "%s<br />%nEditMode: %s<br />Type: NodeLabel";
-
-    public NodeLabel(Node node) {
-        //        this.node = node;
-        super(node);
-        this.label = new JLabel();
-        initialize();
+    public ViewNode(Node node) {
+        this.node = node;
     }
-    /*
-    public Node getNode() {
-        return node;
-    }
-
+    
     public ViewNode getLeftChild() {
         return leftChild;
     }
@@ -47,6 +32,10 @@ public class NodeLabel extends ViewNode {
         this.rightChild = rightChild;
     }
 
+    public Node getNode() {
+        return node;
+    }
+
     public EditMode getEditMode() {
         return editMode;
     }
@@ -56,46 +45,36 @@ public class NodeLabel extends ViewNode {
     }
 
     public int computeWidth() {
-        int thisWidth = getWidth();
+        int thisWidth = getComponent().getWidth();
         int leftWidth = ( leftChild != null ) ? leftChild.computeWidth() : 0;
         int rightWidth = ( rightChild != null ) ? rightChild.computeWidth() : 0;
         int computedWidth = leftWidth + thisWidth + rightWidth;
 
         return computedWidth;
     }
-    */
-    private void initialize() {
-        //        setText(node.getData());
-        this.label.setText(getNode().getData());
+
+    public Component getComponent() {
+        throw new RuntimeException("GetComponent not implemented for " + this);
     }
-    /*
+
     public void printAsHTML() {
         String html = getHTML();
         System.out.println(html);
     }
-    */
 
-    /*
     public String getHTML() {
-        String template = "<table><tr><td colspan=\"2\" style=\"text-align:center;\">%s</td></tr><tr>%s</tr></table>";
         String thisData = getDataAsHTML();
         String childHTML = getChildrenAsTableCells();
-        String htmlString = String.format(template, thisData, childHTML);
+        String htmlString = String.format(htmlTemplate, thisData,childHTML);
         return htmlString;
     }
-    */
 
-    @Override
+    
     public String getDataAsHTML() {
-        String dataAsHTML = String.format(getHtmlDataTemplate(),
-                                          getNode().getData(),
-                                          getEditMode()
-                                          );
-        return dataAsHTML;
+        throw new RuntimeException("getDataAsHTML not implemented for: " + this);
     }
 
-    /*
-    public String getChildrenAsTableCells() {
+    private String getChildrenAsTableCells() {
         String template = "<td>%s</td><td>%s</td>";
         String leftChildString = "";
         if (getLeftChild() != null) {
@@ -108,16 +87,4 @@ public class NodeLabel extends ViewNode {
         String childrenAsHTML = String.format(template, leftChildString, rightChildString);
         return childrenAsHTML;
     }
-    */
-
-    public String getHtmlDataTemplate() {
-        return htmlDataTemplate;
-    }
-
-    public Component getComponent() {
-        return label;
-
-    }
 }
-
-

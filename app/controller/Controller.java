@@ -1,10 +1,10 @@
 package controller;
 
 import model.Node;
-import interfaces.ControllerInterface;
 import view.EditMode;
 import view.Page;
 import view.NodeLabel;
+import view.ViewNode;
 
 import java.awt.Container;
 import java.awt.GridBagLayout;
@@ -29,24 +29,26 @@ public class Controller extends JFrame implements ControllerInterface {
         showView(initialView);
     }
 
-        public void edit(NodeLabel nodeLabel) {
+
+    //        public void edit(NodeLabel nodeLabel) {
+    public void edit(ViewNode editable) {
         System.out.println("Inside the Controller.edit function, got CALLED, about to set the edit mode on thd nodeLabel.!%n");
         System.out.println("Before setting the editMode, the viewModel looks like:\n");
         view.printDebug();
-        nodeLabel.setEditMode(EditMode.EDITING);
+        editable.setEditMode(EditMode.EDITING);
         System.out.println("After setting the edit Mode, of that node, the viewModel looks like:\n");
         view.printDebug();
         System.out.println("About to render the view!!!!\n");
         System.out.println("TAKE NOTE!!!!1 the size I think it should be is:\n");
-        System.out.println(nodeLabel.computeWidth());
+        System.out.println(editable.computeWidth());
         renderNewView();
     }
     
-    public void replace(NodeLabel nodeLabel, NodeLabel replacement) {
+    public void replace(ViewNode viewNode, ViewNode replacement) {
         System.out.println("Inside Controller.handleReplacement, got called!\n");
     }
 
-    public void handleIncorrect(NodeLabel nodeLabel) {
+    public void handleIncorrect(ViewNode viewNode) {
         System.out.println("Inside Controller.handleIncorrect, got called!\n");
     }
 

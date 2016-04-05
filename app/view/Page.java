@@ -3,8 +3,9 @@ package view;
 import model.Node;
 import model.Operator;
 
-import interfaces.ControllerInterface;
-import interfaces.ViewNode;
+//import interfaces.ControllerInterface;
+import controller.ControllerInterface;
+//import interfaces.ViewNode;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -30,7 +31,8 @@ public class Page extends JPanel {
     private ParallelGroup verticalGroup;
     private ControllerInterface controllerInterface;
     private ViewNode rootViewNode;
-    private NodeLabel editable;
+    //    private NodeLabel editable;
+    private ViewNode editable;
     private int editableLevel;
     private NodeTextField textField;
 
@@ -54,9 +56,9 @@ public class Page extends JPanel {
         rootViewNode = traverseNode(rootNode, 1);
         if (editable != null) {
             editable.setEditMode(EditMode.EDITABLE);
-            editable.setForeground(clickableColor);
-            editable.setCursor(new Cursor(Cursor.HAND_CURSOR));
-            editable.addMouseListener(new MouseAdapter() {
+            editable.getComponent().setForeground(clickableColor);
+            editable.getComponent().setCursor(new Cursor(Cursor.HAND_CURSOR));
+            editable.getComponent().addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent mouseEvent) {
                     System.out.println("Inside mouseClicked, got caleld with mouseEvent!!!!:\n");
@@ -65,15 +67,16 @@ public class Page extends JPanel {
                     System.out.println(mouseEvent.getSource());
                     if (controllerInterface != null) {
                         System.out.println("Inside mouseClicked, the controllerInterface is not null, about to call controllerInterface.edit\n");
-                        NodeLabel source = (NodeLabel) mouseEvent.getSource();
-                        controllerInterface.edit(source);
+                        //                        NodeLabel source = (NodeLabel) mouseEvent.getSource();
+                        //                        ViewNode source = mouseEvent.getSource();
+                        controllerInterface.edit(editable);
                     } else {
                         System.out.println("Inside mouseClicked, the controllerInterface is null...\n");
                     }
                 }
             });
         } else {
-            System.out.println("There is no editable node...\n");
+            System.out.println("There is no editable viewNode...\n");
         }
     }
 
@@ -96,27 +99,29 @@ public class Page extends JPanel {
         groupLayout.setVerticalGroup(verticalGroup);
     }
 
-    private NodeLabel traverseNode(Node node, int level) {
+    //    private NodeLabel traverseNode(Node node, int level) {
+    private ViewNode traverseNode(Node node, int level) {
 
         // In-order traversal for horizontal ordering.
         if (node == null) {
             return null;
         }
-        NodeLabel leftNodeLabel = traverseNode(node.getLeftChild(), level + 1);
-        NodeLabel thisNodeLabel = createNodeLabel(node);
-        horizontalGroup.addComponent(thisNodeLabel);
-        verticalGroup.addComponent(thisNodeLabel);
+        //        NodeLabel leftNodeLabel = traverseNode(node.getLeftChild(), level + 1);
+        ViewNode leftViewNode = traverseNode(node.getLeftChild(), level + 1);
+        ViewNode thisViewNode = (ViewNode) createNodeLabel(node);
+        horizontalGroup.addComponent(thisViewNode.getComponent());
+        verticalGroup.addComponent(thisViewNode.getComponent());
 
         // Find the "max" (the first, lowest level operator)
         if (node instanceof Operator) {
             if (level > editableLevel) {
-                editable = thisNodeLabel;
+                editable = thisViewNode;
             }
         }
-        NodeLabel rightNodeLabel = traverseNode(node.getRightChild(), level + 1);
-        thisNodeLabel.setLeftChild(leftNodeLabel);
-        thisNodeLabel.setRightChild(rightNodeLabel);
-        return thisNodeLabel;
+        ViewNode rightViewNode = traverseNode(node.getRightChild(), level + 1);
+        thisViewNode.setLeftChild(leftViewNode);
+        thisViewNode.setRightChild(rightViewNode);
+        return thisViewNode;
     }
 
     private ViewNode traverseViewNode(ViewNode viewNode) {
@@ -129,17 +134,17 @@ public class Page extends JPanel {
         if (thisViewNode instanceof NodeTextField) {
             int width = viewNode.computeWidth();
             textField = (NodeTextField) thisViewNode;
-            horizontalGroup.addComponent((Component) thisViewNode,
+            horizontalGroup.addComponent(thisViewNode.getComponent(),
                                          width,
                                          width,
                                          width
                                          );
-            verticalGroup.addComponent((Component) thisViewNode);
+            verticalGroup.addComponent(thisViewNode.getComponent());
             return thisViewNode;
         }
         ViewNode leftViewNode = traverseViewNode(viewNode.getLeftChild());
-        horizontalGroup.addComponent((Component) thisViewNode);
-        verticalGroup.addComponent((Component) thisViewNode);
+        horizontalGroup.addComponent(thisViewNode.getComponent());
+        verticalGroup.addComponent(thisViewNode.getComponent());
         ViewNode rightViewNode = traverseViewNode(viewNode.getRightChild());
         thisViewNode.setLeftChild(leftViewNode);
         thisViewNode.setRightChild(rightViewNode);
@@ -148,14 +153,13 @@ public class Page extends JPanel {
 
 
     private NodeLabel createNodeLabel(Node node) {
-        System.out.println("Inside createComponent, got called on node..\n");
         NodeLabel nodeLabel = new NodeLabel(node);
-        nodeLabel.setFont(new Font(
-                                labelFontName,
-                                labelFontStyle,
-                                labelFontSize
-                                )
-                       );
+        nodeLabel.getComponent().setFont(new Font(
+                                                 labelFontName,
+                                                 labelFontStyle,
+                                                 labelFontSize
+                                                 )
+                                        );
         return nodeLabel;
     }
 
@@ -167,7 +171,7 @@ public class Page extends JPanel {
         }
         NodeTextField newTextField = new NodeTextField(viewNode);
         System.out.printf("Inside Page.createViewNode, about to setFont on the newTextField, using labelFontName %s, labelFontStyle %s, labelFontSize %d\n", labelFontName, labelFontStyle, labelFontSize);
-        newTextField.setFont(new Font(labelFontName, labelFontStyle, labelFontSize));
+        newTextField.getComponent().setFont(new Font(labelFontName, labelFontStyle, labelFontSize));
         return newTextField;
     }
 
@@ -192,12 +196,12 @@ public class Page extends JPanel {
     public void whenShown() {
         System.out.println("Inside Page.java, the whenShown function, GOT CALLEEDDD!!!\n");
         if (textField != null) {
-            textField.requestFocusInWindow();
+            textField.getComponent().requestFocusInWindow();
         }
     }
     public void cleanUp() {
         if (editable != null) {
-            editable.setEnabled(false);
+            editable.getComponent().setEnabled(false);
         }
     }
     /*
