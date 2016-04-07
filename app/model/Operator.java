@@ -12,7 +12,6 @@ public class Operator extends Node {
     }
 
     public String getDataAsHTML() {
-        //        String editModeName = getEditMode().name();
         String dataAsHTML = String.format(dataTemplate, type);
         return dataAsHTML;
     }

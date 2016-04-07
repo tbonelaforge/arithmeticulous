@@ -2,10 +2,9 @@ package view;
 
 import model.Node;
 import model.Operator;
+import model.TreePrinter;
 
-//import interfaces.ControllerInterface;
 import controller.ControllerInterface;
-//import interfaces.ViewNode;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -31,7 +30,6 @@ public class Page extends JPanel {
     private ParallelGroup verticalGroup;
     private ControllerInterface controllerInterface;
     private ViewNode rootViewNode;
-    //    private NodeLabel editable;
     private ViewNode editable;
     private int editableLevel;
     private NodeTextField textField;
@@ -67,8 +65,6 @@ public class Page extends JPanel {
                     System.out.println(mouseEvent.getSource());
                     if (controllerInterface != null) {
                         System.out.println("Inside mouseClicked, the controllerInterface is not null, about to call controllerInterface.edit\n");
-                        //                        NodeLabel source = (NodeLabel) mouseEvent.getSource();
-                        //                        ViewNode source = mouseEvent.getSource();
                         controllerInterface.edit(editable);
                     } else {
                         System.out.println("Inside mouseClicked, the controllerInterface is null...\n");
@@ -84,7 +80,7 @@ public class Page extends JPanel {
         initializeLayout();
         rootViewNode = traverseViewNode(oldRootViewNode);
         System.out.println("Inside initializeFromViewNode, after traversing, the rootViewNode now looks like:\n");
-        rootViewNode.printAsHTML();
+        TreePrinter.printAsHTML(rootViewNode);
     }
 
 
@@ -99,14 +95,12 @@ public class Page extends JPanel {
         groupLayout.setVerticalGroup(verticalGroup);
     }
 
-    //    private NodeLabel traverseNode(Node node, int level) {
     private ViewNode traverseNode(Node node, int level) {
 
         // In-order traversal for horizontal ordering.
         if (node == null) {
             return null;
         }
-        //        NodeLabel leftNodeLabel = traverseNode(node.getLeftChild(), level + 1);
         ViewNode leftViewNode = traverseNode(node.getLeftChild(), level + 1);
         ViewNode thisViewNode = (ViewNode) createNodeLabel(node);
         horizontalGroup.addComponent(thisViewNode.getComponent());
@@ -175,20 +169,6 @@ public class Page extends JPanel {
         return newTextField;
     }
 
-
-    /*
-    public void setEditHandler(NodeEditor nodeEditor) {
-        editHandler = nodeEditor;
-    }
-
-    public void setCorrectHandler(NodeReplacer nodeReplacer) {
-        correctHandler = nodeReplacer;
-    }
-
-    public void setIncorrectHandler(NodeEditor nodeEditor) {
-        incorrectHandler = nodeEditor;
-    }
-    */
     public void setControllerInterface(ControllerInterface controllerInterface) {
         this.controllerInterface = controllerInterface;
     }
@@ -204,14 +184,8 @@ public class Page extends JPanel {
             editable.getComponent().setEnabled(false);
         }
     }
-    /*
-    public int getTextFieldWidth() {
-        return -1; // To be overridden;
-    }
-    */
 
     public void printDebug() {
-        rootViewNode.printAsHTML();
+        TreePrinter.printAsHTML(rootViewNode);
     }
-
 }

@@ -13,7 +13,6 @@ public class Natural extends Node {
 
     public String getDataAsHTML() {
         String valueString = getData();
-        //        String editModeName = getEditMode().name();
         String dataAsHTML = String.format(dataTemplate, valueString);
         return dataAsHTML;
     }
