@@ -24,4 +24,8 @@ public class Natural extends Node {
     public String getText() {
         return String.valueOf(value);
     }
+
+    public Node evaluate() {
+        return this;
+    }
 }

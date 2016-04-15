@@ -10,6 +10,8 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -81,6 +83,25 @@ public class Page extends JPanel {
         rootViewNode = traverseViewNode(oldRootViewNode);
         System.out.println("Inside initializeFromViewNode, after traversing, the rootViewNode now looks like:\n");
         TreePrinter.printAsHTML(rootViewNode);
+        if (textField != null) {
+            System.out.println("Inside Page.initializeFromViewNode, after traverseing, we know we have a textField, about to set it's onSubmit...\n");
+            textField.setOnSubmit(new Runnable() {
+                public void run() {
+                    System.out.println("Inside Page, the submit handler is running!!!\n");
+                    String submitted = textField.getText();
+                    Node expected = textField.getNode().evaluate();
+                    System.out.printf("Inside The submit handler, about to compare %s and %s%n", submitted, expected.getData());
+                    if (submitted.equals(expected.getData())) {
+                        ViewNode replacement = (ViewNode) createNodeLabel(expected);
+                        if (controllerInterface != null) {
+                            controllerInterface.replace(textField, replacement);
+                        }
+                    } else {
+                        System.out.printf("INCORRECT: submitted %s expected %s%n", submitted, expected.getData());
+                    }
+                }
+            });
+        }
     }
 
 

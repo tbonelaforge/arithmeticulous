@@ -45,7 +45,7 @@ public class Controller extends JFrame implements ControllerInterface {
     }
     
     public void replace(ViewNode viewNode, ViewNode replacement) {
-        System.out.println("Inside Controller.handleReplacement, got called!\n");
+        System.out.println("INSIDE CONTROLLER.HANDLEREPLACEMENT, GOT CALLED!\n");
     }
 
     public void handleIncorrect(ViewNode viewNode) {

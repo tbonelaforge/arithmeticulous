@@ -33,4 +33,8 @@ public class Node implements PrintableTree {
     public String getText() {
         throw new RuntimeException("getText not implemented for: " + this);
     }
+
+    public Node evaluate() {
+        throw new RuntimeException("evaluate not implemented for: " + this);
+    }
 }
