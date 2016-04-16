@@ -29,8 +29,6 @@ public class Controller extends JFrame implements ControllerInterface {
         showView(initialView);
     }
 
-
-    //        public void edit(NodeLabel nodeLabel) {
     public void edit(ViewNode editable) {
         System.out.println("Inside the Controller.edit function, got CALLED, about to set the edit mode on thd nodeLabel.!%n");
         System.out.println("Before setting the editMode, the viewModel looks like:\n");
@@ -46,6 +44,8 @@ public class Controller extends JFrame implements ControllerInterface {
     
     public void replace(ViewNode viewNode, ViewNode replacement) {
         System.out.println("INSIDE CONTROLLER.HANDLEREPLACEMENT, GOT CALLED!\n");
+        model = model.replace(viewNode.getNode(), replacement.getNode());
+        showView(createInitialView());
     }
 
     public void handleIncorrect(ViewNode viewNode) {
@@ -53,14 +53,15 @@ public class Controller extends JFrame implements ControllerInterface {
     }
 
     private void renderNewView() {
-        //        view = generateNewView(view);
         Page newView = generateNewView(view);
-        view.cleanUp();
         showView(newView);
     }
 
     private void showView(Page newView) {
         contentPane.removeAll();
+        if (view != null) {
+            view.cleanUp();
+        }
         contentPane.add(newView);
         contentPane.revalidate();
         contentPane.repaint();
@@ -81,7 +82,5 @@ public class Controller extends JFrame implements ControllerInterface {
         view.setControllerInterface(this);
         return view;
     }
-
-
 
 }

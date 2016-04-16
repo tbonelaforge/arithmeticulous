@@ -37,4 +37,17 @@ public class Node implements PrintableTree {
     public Node evaluate() {
         throw new RuntimeException("evaluate not implemented for: " + this);
     }
+
+    public Node replace(Node target, Node replacement) {
+        if (this == target) {
+            return replacement;
+        }
+        if (getLeftChild() != null) {
+            setLeftChild(getLeftChild().replace(target, replacement));
+        }
+        if (getRightChild() != null) {
+            setRightChild(getRightChild().replace(target, replacement));
+        }
+        return this;
+    }
 }
