@@ -97,7 +97,8 @@ public class Page extends JPanel {
                             controllerInterface.replace(textField, replacement);
                         }
                     } else {
-                        System.out.printf("INCORRECT: submitted %s expected %s%n", submitted, expected.getData());
+                        System.out.printf("INCORRECT: submitted %s expected %s%n about to reset...", submitted, expected.getData());
+                        controllerInterface.reset();
                     }
                 }
             });

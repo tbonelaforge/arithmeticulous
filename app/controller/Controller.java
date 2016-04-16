@@ -25,8 +25,7 @@ public class Controller extends JFrame implements ControllerInterface {
         setSize(400, 300);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setTitle("Arithmetic");
-        Page initialView = createInitialView();
-        showView(initialView);
+        reset();
     }
 
     public void edit(ViewNode editable) {
@@ -42,6 +41,10 @@ public class Controller extends JFrame implements ControllerInterface {
         renderNewView();
     }
     
+    public void reset() {
+        showView(createInitialView());
+    }
+
     public void replace(ViewNode viewNode, ViewNode replacement) {
         System.out.println("INSIDE CONTROLLER.HANDLEREPLACEMENT, GOT CALLED!\n");
         model = model.replace(viewNode.getNode(), replacement.getNode());
