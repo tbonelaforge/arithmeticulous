@@ -18,6 +18,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.SequentialGroup;
 import javax.swing.GroupLayout.ParallelGroup;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -61,43 +62,46 @@ public class Page extends JPanel {
             editable.getComponent().addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent mouseEvent) {
-                    System.out.println("Inside mouseClicked, got caleld with mouseEvent!!!!:\n");
-                    System.out.println(mouseEvent);
-                    System.out.println("It has source!!!!111\n");
-                    System.out.println(mouseEvent.getSource());
                     if (controllerInterface != null) {
-                        System.out.println("Inside mouseClicked, the controllerInterface is not null, about to call controllerInterface.edit\n");
                         controllerInterface.edit(editable);
-                    } else {
-                        System.out.println("Inside mouseClicked, the controllerInterface is null...\n");
                     }
                 }
             });
         } else {
-            System.out.println("There is no editable viewNode...\n");
+            markCorrect();
         }
+    }
+
+    private void markCorrect() {
+        ImageIcon correctIcon = null;
+        String path = "images/check.png";
+        String description = "answer is correct";
+        java.net.URL imgURL = getClass().getResource(path);
+        if (imgURL != null) {
+            correctIcon = new ImageIcon(imgURL, description);
+        } else {
+            System.err.println("Couldn't find file: " + path);
+        }
+        JLabel correctLabel = new JLabel(correctIcon);
+        horizontalGroup.addComponent(correctLabel);
+        verticalGroup.addComponent(correctLabel);
     }
 
     private void initializeFromViewNode(ViewNode oldRootViewNode) {
         initializeLayout();
         rootViewNode = traverseViewNode(oldRootViewNode);
-        System.out.println("Inside initializeFromViewNode, after traversing, the rootViewNode now looks like:\n");
         TreePrinter.printAsHTML(rootViewNode);
         if (textField != null) {
-            System.out.println("Inside Page.initializeFromViewNode, after traverseing, we know we have a textField, about to set it's onSubmit...\n");
             textField.setOnSubmit(new Runnable() {
                 public void run() {
-                    System.out.println("Inside Page, the submit handler is running!!!\n");
                     String submitted = textField.getText();
                     Node expected = textField.getNode().evaluate();
-                    System.out.printf("Inside The submit handler, about to compare %s and %s%n", submitted, expected.getData());
-                    if (submitted.equals(expected.getData())) {
+                    if (submitted.equals(expected.getData())) { // Correct answer
                         ViewNode replacement = (ViewNode) createNodeLabel(expected);
                         if (controllerInterface != null) {
                             controllerInterface.replace(textField, replacement);
                         }
-                    } else {
-                        System.out.printf("INCORRECT: submitted %s expected %s%n about to reset...", submitted, expected.getData());
+                    } else { // Incorrect answer
                         controllerInterface.reset();
                     }
                 }
@@ -180,13 +184,10 @@ public class Page extends JPanel {
     }
 
     private ViewNode createViewNode(ViewNode viewNode) {
-        System.out.println("Inside createViewNode, got called on viewNode..\n");
-        System.out.println(viewNode);
         if (viewNode.getEditMode() != EditMode.EDITING) {
             return viewNode;
         }
         NodeTextField newTextField = new NodeTextField(viewNode);
-        System.out.printf("Inside Page.createViewNode, about to setFont on the newTextField, using labelFontName %s, labelFontStyle %s, labelFontSize %d\n", labelFontName, labelFontStyle, labelFontSize);
         newTextField.getComponent().setFont(new Font(labelFontName, labelFontStyle, labelFontSize));
         return newTextField;
     }
@@ -196,7 +197,6 @@ public class Page extends JPanel {
     }
 
     public void whenShown() {
-        System.out.println("Inside Page.java, the whenShown function, GOT CALLEEDDD!!!\n");
         if (textField != null) {
             textField.getComponent().requestFocusInWindow();
         }

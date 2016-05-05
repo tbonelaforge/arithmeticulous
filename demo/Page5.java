@@ -1,3 +1,4 @@
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -22,6 +23,8 @@ import java.awt.event.MouseEvent;
 
 public class Page5 extends Page {
     private JLabel jLabel1;
+    private ImageIcon imageIcon;
+    private JLabel jLabel2;
     public Page5() {
         jLabel1 = new JLabel();
         Font labelFont = jLabel1.getFont();
@@ -30,7 +33,11 @@ public class Page5 extends Page {
         String labelFontName = labelFont.getName();
         jLabel1.setText("11");
         jLabel1.setFont(new Font(labelFontName, labelFontStyle, 2 * labelFontSize));
-
+        imageIcon = new ImageIcon(
+                                  "images/check.png",
+                                  "means they got it correct"
+                                  );
+        jLabel2 = new JLabel(imageIcon);
         GroupLayout groupLayout = new GroupLayout(this);
         this.setLayout(groupLayout);
         groupLayout.setAutoCreateGaps(false);
@@ -41,13 +48,15 @@ public class Page5 extends Page {
 
     private void setHorizontalLayout(GroupLayout groupLayout) {
         SequentialGroup sGroup1 = groupLayout.createSequentialGroup()
-            .addComponent(jLabel1);
+            .addComponent(jLabel1)
+            .addComponent(jLabel2);
         groupLayout.setHorizontalGroup(sGroup1);
     }
 
     private void setVerticalLayout(GroupLayout groupLayout) {
         ParallelGroup pGroup1 = groupLayout.createParallelGroup()
-            .addComponent(jLabel1);
+            .addComponent(jLabel1)
+            .addComponent(jLabel2);
         groupLayout.setVerticalGroup(pGroup1);
     }
 
