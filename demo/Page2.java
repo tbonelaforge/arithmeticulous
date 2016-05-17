@@ -3,11 +3,13 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.GroupLayout;
+import javax.swing.JDialog;
 import javax.swing.JTextField;
 import javax.swing.GroupLayout.SequentialGroup;
 import javax.swing.GroupLayout.ParallelGroup;
 import javax.swing.WindowConstants;
 import javax.swing.BorderFactory;
+import javax.swing.SwingConstants;
 import javax.swing.text.DefaultCaret;
 import javax.swing.Timer;
 
@@ -16,7 +18,9 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Container;
 import java.awt.EventQueue;
+import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Frame;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
@@ -32,6 +36,7 @@ public class Page2 extends Page implements FocusListener, ActionListener {
     private JLabel jLabel2;
     private JTextField jTextField1;
     private int textFieldWidth;
+    private JDialog modal;
 
 
     public Page2(int textFieldWidth) {
@@ -102,9 +107,34 @@ public class Page2 extends Page implements FocusListener, ActionListener {
             forwardHandler.run();
         } else {
             System.out.println("INCORRECT!!! (need to move back to page1)\n");
-            if (backwardHandler != null) {
-                backwardHandler.run();
-            }
+            modal.pack();
+            modal.setVisible(true);
+            System.out.println("Here is where we should run the backward handler...%n");
         }
+    }
+
+    public void createModal(Frame parentFrame) {
+        modal = new JDialog(parentFrame, "Incorrect", true);
+        modal.setLocationRelativeTo(parentFrame);
+        JLabel modalLabel = new JLabel("Oops! Try multiplying 3 times 2.");
+        modalLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        JButton modalButton = new JButton("OK");
+        modalButton.setHorizontalAlignment(SwingConstants.CENTER);
+        modalButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent actionEvent) {
+                System.out.println("Inside the modal button actionPerformed, got called, about to attempt to run the backwardHandler...\n");
+                modal.setVisible(false);
+                if (backwardHandler != null) {
+                    backwardHandler.run();
+                }   
+            }
+        });
+        Container modalContentPane = modal.getContentPane();
+        modalContentPane.setLayout(new BorderLayout());
+        modalContentPane.add(modalLabel, BorderLayout.NORTH);
+        JPanel modalButtonPanel = new JPanel();
+        modalButtonPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        modalButtonPanel.add(modalButton);
+        modalContentPane.add(modalButtonPanel, BorderLayout.SOUTH);
     }
 }

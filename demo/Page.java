@@ -1,4 +1,5 @@
 import javax.swing.JPanel;
+import java.awt.Frame;
 
 public class Page extends JPanel {
     protected Runnable forwardHandler;
@@ -15,5 +16,7 @@ public class Page extends JPanel {
     public void cleanUp() {}
     public int getTextFieldWidth() {
         return -1; // To be overridden;
+    }
+    public void createModal(Frame parentFrame) {
     }
 }

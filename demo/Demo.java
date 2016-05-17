@@ -106,6 +106,7 @@ public class Demo extends JFrame {
                 previousPage();
             }
         });
+        page.createModal(this);
         return page;
     }
 }
