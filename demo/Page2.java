@@ -23,6 +23,7 @@ import java.awt.Font;
 import java.awt.Frame;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.Point;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -45,6 +46,7 @@ public class Page2 extends Page implements FocusListener, ActionListener {
         Font labelFont = jLabel1.getFont();
         int labelFontStyle = labelFont.getStyle();
         int labelFontSize = labelFont.getSize();
+        System.out.printf("The labelFontSize is %d%n", labelFontSize);
         String labelFontName = labelFont.getName();
         jLabel1.setText("5");
         jLabel1.setFont(new Font(labelFontName, labelFontStyle, 2 * labelFontSize));
@@ -107,8 +109,18 @@ public class Page2 extends Page implements FocusListener, ActionListener {
             forwardHandler.run();
         } else {
             System.out.println("INCORRECT!!! (need to move back to page1)\n");
+            //            Point location = jLabel1.getLocationOnScreen();
+            Point location = getLocationOnScreen();
+            System.out.printf("The location of the Page (extends JPanel) is: (%d, %d)%n", location.x, location.y);
+            System.out.printf("The height of the Page (extends JPanel) is: %d%n", getHeight());
+            System.out.printf("About to pack..\n");
             modal.pack();
+            Insets modalInsets = modal.getInsets();
+            System.out.printf("bottom = %d, left = %d, right = %d, top = %d %n", modalInsets.bottom, modalInsets.left, modalInsets.right, modalInsets.top);
+            modal.setLocation(location.x, location.y + getHeight());
             modal.setVisible(true);
+            System.out.println("Just displayed the modal, the Insets are:\n");
+;
             System.out.println("Here is where we should run the backward handler...%n");
         }
     }
