@@ -1,5 +1,7 @@
 package controller;
 
+import java.awt.Frame;
+
 import view.ViewNode;
 
 public interface ControllerInterface {
@@ -7,4 +9,5 @@ public interface ControllerInterface {
     void reset();
     void replace(ViewNode viewNode, ViewNode replacement);
     void handleIncorrect(ViewNode viewNode);
+    Frame getFrame();
 }

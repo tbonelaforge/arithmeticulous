@@ -7,6 +7,7 @@ import view.NodeLabel;
 import view.ViewNode;
 
 import java.awt.Container;
+import java.awt.Frame;
 import java.awt.GridBagLayout;
 
 import javax.swing.JFrame;
@@ -55,6 +56,10 @@ public class Controller extends JFrame implements ControllerInterface {
         System.out.println("Inside Controller.handleIncorrect, got called!\n");
     }
 
+    public Frame getFrame() {
+        return this;
+    }
+
     private void renderNewView() {
         Page newView = generateNewView(view);
         showView(newView);
@@ -83,6 +88,7 @@ public class Controller extends JFrame implements ControllerInterface {
     private Page generateNewView(Page currentView) {
         Page view = new Page(currentView);
         view.setControllerInterface(this);
+        view.createModal();
         return view;
     }
 

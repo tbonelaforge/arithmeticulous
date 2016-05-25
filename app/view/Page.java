@@ -7,20 +7,28 @@ import model.TreePrinter;
 import controller.ControllerInterface;
 
 import java.awt.Color;
+import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Font;
+import java.awt.FlowLayout;
+import java.awt.Frame;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.SequentialGroup;
 import javax.swing.GroupLayout.ParallelGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 
 public class Page extends JPanel {
@@ -36,6 +44,7 @@ public class Page extends JPanel {
     private ViewNode editable;
     private int editableLevel;
     private NodeTextField textField;
+    private JDialog modal;
 
     private static Color clickableColor = new Color(200, 0, 255);
 
@@ -102,7 +111,12 @@ public class Page extends JPanel {
                             controllerInterface.replace(textField, replacement);
                         }
                     } else { // Incorrect answer
-                        controllerInterface.reset();
+                        Point location = getLocationOnScreen();
+                        System.out.printf("The location of the Page is: (%d, %d)%n", location.x, location.y);
+                        System.out.printf("The height of the Page is: %d%n", getHeight());
+                        modal.pack();
+                        modal.setLocation(location.x, location.y + getHeight());
+                        modal.setVisible(true);
                     }
                 }
             });
@@ -209,5 +223,32 @@ public class Page extends JPanel {
 
     public void printDebug() {
         TreePrinter.printAsHTML(rootViewNode);
+    }
+
+    public void createModal() {
+        if (controllerInterface == null) {
+            System.out.println("Page cannot create modal without a controller interface\n");
+            return;
+        }
+        Frame parentFrame = controllerInterface.getFrame();
+        modal = new JDialog(parentFrame, "Incorrect", true);
+        modal.setLocationRelativeTo(parentFrame);
+        JLabel modalLabel = new JLabel("Oops! check your arithmetic.");
+        modalLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        JButton modalButton = new JButton("OK");
+        modalButton.setHorizontalAlignment(SwingConstants.CENTER);
+        modalButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent actionEvent) {
+                modal.setVisible(false);
+                controllerInterface.reset();
+            }
+        });
+        Container modalContentPane = modal.getContentPane();
+        modalContentPane.setLayout(new BorderLayout());
+        modalContentPane.add(modalLabel, BorderLayout.NORTH);
+        JPanel modalButtonPanel = new JPanel();
+        modalButtonPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        modalButtonPanel.add(modalButton);
+        modalContentPane.add(modalButtonPanel, BorderLayout.SOUTH);
     }
 }
