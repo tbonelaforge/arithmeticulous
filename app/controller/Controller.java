@@ -88,7 +88,6 @@ public class Controller extends JFrame implements ControllerInterface {
     private Page generateNewView(Page currentView) {
         Page view = new Page(currentView);
         view.setControllerInterface(this);
-        view.createModal();
         return view;
     }
 

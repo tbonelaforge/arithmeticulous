@@ -111,6 +111,7 @@ public class Page extends JPanel {
                             controllerInterface.replace(textField, replacement);
                         }
                     } else { // Incorrect answer
+                        createModal(textField);
                         Point location = getLocationOnScreen();
                         System.out.printf("The location of the Page is: (%d, %d)%n", location.x, location.y);
                         System.out.printf("The height of the Page is: %d%n", getHeight());
@@ -225,7 +226,7 @@ public class Page extends JPanel {
         TreePrinter.printAsHTML(rootViewNode);
     }
 
-    public void createModal() {
+    public void createModal(ViewNode viewNode) {
         if (controllerInterface == null) {
             System.out.println("Page cannot create modal without a controller interface\n");
             return;
@@ -233,7 +234,12 @@ public class Page extends JPanel {
         Frame parentFrame = controllerInterface.getFrame();
         modal = new JDialog(parentFrame, "Incorrect", true);
         modal.setLocationRelativeTo(parentFrame);
-        JLabel modalLabel = new JLabel("Oops! check your arithmetic.");
+        System.out.println("Inside Page.createModal, about to getHint, passing in viewNode:\n");
+        TreePrinter.printAsHTML(viewNode);
+        System.out.println("Inside Page.createModal, the viewNode's node looks like:\n");
+        TreePrinter.printAsHTML(viewNode.getNode());
+        String hint = viewNode.getHint();
+        JLabel modalLabel = new JLabel(hint);
         modalLabel.setHorizontalAlignment(SwingConstants.CENTER);
         JButton modalButton = new JButton("OK");
         modalButton.setHorizontalAlignment(SwingConstants.CENTER);

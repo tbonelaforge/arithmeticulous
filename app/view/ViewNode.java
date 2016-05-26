@@ -1,6 +1,8 @@
 package view;
 
 import model.Node;
+import model.Natural;
+import model.Operator;
 import model.PrintableTree;
 
 import java.awt.Component;
@@ -58,5 +60,48 @@ public class ViewNode implements PrintableTree {
 
     public String getDataAsHTML() {
         throw new RuntimeException("getDataAsHTML not implemented for: " + this);
+    }
+
+    public String getHint() {
+        Node leftNode = getNode().getLeftChild();
+        Node rightNode = getNode().getRightChild();
+        if (leftNode == null || !(leftNode instanceof Natural) ||
+            rightNode == null || !(rightNode instanceof Natural)) {
+            return "Try a simpler expression.";
+        }
+        if (!(getNode() instanceof Operator)) {
+            throw new RuntimeException("Can only get hint for Operator nodes.");
+        }
+        Operator operator = (Operator) getNode();
+        String fullOpName = getFullOperationName(operator);
+        String briefOpName = getBriefOperationName(operator);
+        int operand1 = ((Natural) leftNode).getValue();
+        int operand2 = ((Natural) rightNode).getValue();
+
+        // Construct a hint string, e.g. 'Try multiplying 2 times 3.'
+        String hint = String.format("Try %s %d %s %d", fullOpName, operand1, briefOpName, operand2);
+        return hint;
+    }
+
+    private static String getFullOperationName(Operator operator) {
+        switch (operator.getType()) {
+        case "*":
+            return "multiplying";
+        case "+":
+            return "adding";
+        default:
+            throw new RuntimeException("Unrecognized operator: " + operator.getType());
+        }
+    }
+
+    private static String getBriefOperationName(Operator operator) {
+        switch (operator.getType()) {
+        case "*":
+            return "times";
+        case "+":
+            return "plus";
+        default:
+            throw new RuntimeException("Unrecognized operator: " + operator.getType());
+        }
     }
 }
