@@ -1,4 +1,4 @@
-package model;
+package arithmeticulous.model;
 
 public class Node implements PrintableTree {
     private Node leftChild;

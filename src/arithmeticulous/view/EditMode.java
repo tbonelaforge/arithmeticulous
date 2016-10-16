@@ -1,4 +1,4 @@
-package view;
+package arithmeticulous.view;
 
 public enum EditMode {
     READ_ONLY,

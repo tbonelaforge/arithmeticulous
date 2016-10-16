@@ -1,4 +1,4 @@
-package model;
+package arithmeticulous.model;
 
 public class Operator extends Node {
     private String type;

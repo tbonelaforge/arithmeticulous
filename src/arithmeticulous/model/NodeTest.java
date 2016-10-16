@@ -1,6 +1,6 @@
-package model;
+package arithmeticulous.model;
 
-import model.Node;
+import arithmeticulous.model.Node;
 
 public class NodeTest {
     public static void main(String[] args) {

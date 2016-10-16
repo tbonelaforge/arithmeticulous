@@ -1,8 +1,8 @@
-package interfaces;
+package arithmeticulous.interfaces;
 
-import model.Node;
+import arithmeticulous.model.Node;
 
-import view.EditMode;
+import arithmeticulous.view.EditMode;
 
 public interface ViewNode {
     String getHTML();

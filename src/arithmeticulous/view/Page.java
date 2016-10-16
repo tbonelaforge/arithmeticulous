@@ -1,10 +1,10 @@
-package view;
+package arithmeticulous.view;
 
-import model.Node;
-import model.Operator;
-import model.TreePrinter;
+import arithmeticulous.model.Node;
+import arithmeticulous.model.Operator;
+import arithmeticulous.model.TreePrinter;
 
-import controller.ControllerInterface;
+import arithmeticulous.controller.ControllerInterface;
 
 import java.awt.Color;
 import java.awt.BorderLayout;
@@ -45,10 +45,12 @@ public class Page extends JPanel {
     private int editableLevel;
     private NodeTextField textField;
     private JDialog modal;
+    private boolean allCorrect;
 
     private static Color clickableColor = new Color(200, 0, 255);
 
-    public Page() {
+    public Page(ControllerInterface controllerInterface) {
+        this.controllerInterface = controllerInterface;
         JLabel temp = new JLabel();
         Font exampleFont = temp.getFont();
         labelFontStyle = exampleFont.getStyle();
@@ -56,8 +58,8 @@ public class Page extends JPanel {
         labelFontName = exampleFont.getName();
     }
 
-    public Page(Page page) {
-        this();
+    public Page(ControllerInterface controllerInterface, Page page) {
+        this(controllerInterface);
         initializeFromViewNode(page.rootViewNode);
     }
 
@@ -94,6 +96,7 @@ public class Page extends JPanel {
         JLabel correctLabel = new JLabel(correctIcon);
         horizontalGroup.addComponent(correctLabel);
         verticalGroup.addComponent(correctLabel);
+        allCorrect = true;
     }
 
     private void initializeFromViewNode(ViewNode oldRootViewNode) {
@@ -207,9 +210,11 @@ public class Page extends JPanel {
         return newTextField;
     }
 
+    /*
     public void setControllerInterface(ControllerInterface controllerInterface) {
         this.controllerInterface = controllerInterface;
     }
+    */
 
     public void whenShown() {
         if (textField != null) {
@@ -256,5 +261,9 @@ public class Page extends JPanel {
         modalButtonPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
         modalButtonPanel.add(modalButton);
         modalContentPane.add(modalButtonPanel, BorderLayout.SOUTH);
+    }
+
+    public boolean isAllCorrect() {
+        return allCorrect;
     }
 }

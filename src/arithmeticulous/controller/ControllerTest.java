@@ -1,8 +1,8 @@
-package controller;
+package arithmeticulous.controller;
 
-import model.Node;
-import model.Natural;
-import model.Operator;
+import arithmeticulous.model.Node;
+import arithmeticulous.model.Natural;
+import arithmeticulous.model.Operator;
 
 import java.awt.EventQueue;
 import javax.swing.JFrame;
@@ -23,7 +23,7 @@ public class ControllerTest {
                 JFrame testFrame = new JFrame();
                 testFrame.setSize(400, 300);
                 testFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                Controller controller = new Controller(testFrame);
+                Controller controller = new Controller(testFrame.getContentPane());
                 controller.initialize(node5);
             }
         });

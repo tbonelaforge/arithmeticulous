@@ -1,4 +1,4 @@
-package model;
+package arithmeticulous.model;
 
 public interface PrintableTree {
     String getDataAsHTML();

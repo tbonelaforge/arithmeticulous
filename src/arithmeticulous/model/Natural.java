@@ -1,4 +1,4 @@
-package model;
+package arithmeticulous.model;
 
 public class Natural extends Node {
     private int value;

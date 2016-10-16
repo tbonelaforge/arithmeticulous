@@ -1,7 +1,7 @@
-package view;
+package arithmeticulous.view;
 
-import model.Node;
-import model.TreePrinter;
+import arithmeticulous.model.Node;
+import arithmeticulous.model.TreePrinter;
 
 import java.awt.Component;
 

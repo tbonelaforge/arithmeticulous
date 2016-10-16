@@ -1,13 +1,12 @@
-package controller;
+package arithmeticulous.controller;
 
 import java.awt.Frame;
 
-import view.ViewNode;
+import arithmeticulous.view.ViewNode;
 
 public interface ControllerInterface {
     void edit(ViewNode editable);
     void reset();
     void replace(ViewNode viewNode, ViewNode replacement);
-    void handleIncorrect(ViewNode viewNode);
     Frame getFrame();
 }

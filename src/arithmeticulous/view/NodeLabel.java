@@ -1,8 +1,6 @@
-package view;
+package arithmeticulous.view;
 
-//import interfaces.ViewNode;
-
-import model.Node;
+import arithmeticulous.model.Node;
 
 import java.awt.Component;
 

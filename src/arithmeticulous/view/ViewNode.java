@@ -1,9 +1,9 @@
-package view;
+package arithmeticulous.view;
 
-import model.Node;
-import model.Natural;
-import model.Operator;
-import model.PrintableTree;
+import arithmeticulous.model.Node;
+import arithmeticulous.model.Natural;
+import arithmeticulous.model.Operator;
+import arithmeticulous.model.PrintableTree;
 
 import java.awt.Component;
 

@@ -1,6 +1,6 @@
-package model;
+package arithmeticulous.model;
 
-import model.PrintableTree;
+import arithmeticulous.model.PrintableTree;
 
 public class TreePrinter {
     public static void printAsHTML(PrintableTree node) {
