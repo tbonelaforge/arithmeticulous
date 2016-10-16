@@ -15,6 +15,7 @@ import arithmeticulous.controller.Controller;
 import arithmeticulous.model.Node;
 import arithmeticulous.model.Natural;
 import arithmeticulous.model.Operator;
+import arithmeticulous.model.NodeGenerator;
 
 public class ArithmeticApp extends JFrame {
     
@@ -36,6 +37,20 @@ public class ArithmeticApp extends JFrame {
     }
 
     public Node makeExpression() {
+        Node expression = NodeGenerator.generateRandomExpression(2);
+        /*
+        Node node1 = new Natural(getRandomInt(2, 5));
+        Node node3 = new Natural(getRandomInt(2, 5));
+        Node node2 = new Operator("+");
+        node2.setLeftChild(node1);
+        node2.setRightChild(node3);
+        Node node4 = new Natural(getRandomInt(2, 5));
+        Node node5 = new Operator("*");
+        node5.setLeftChild(node4);
+        node5.setRightChild(node2);
+        expression = node5;
+        */
+        /*
         Node node1 = new Natural(getRandomInt(2, 5));
         Node node3 = new Natural(getRandomInt(2, 5));
         Node node2 = new Operator("*");
@@ -45,7 +60,9 @@ public class ArithmeticApp extends JFrame {
         Node node5 = new Operator("+");
         node5.setLeftChild(node4);
         node5.setRightChild(node2);
-        return node5;
+        expression = node5;
+        */
+        return expression;
     }
     
     private void initComponents() {

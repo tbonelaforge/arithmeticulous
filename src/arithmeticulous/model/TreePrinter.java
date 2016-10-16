@@ -8,7 +8,7 @@ public class TreePrinter {
         System.out.println(htmlString);
     }
 
-   private static String template = "<table><tr><td colspan=\"2\" style=\"text-align:center;\">%s</td></tr><tr>%s</tr></table>";
+   private static String template = "<table border=\"1\"><tr><td colspan=\"2\" style=\"text-align:center;\">%s</td></tr><tr>%s</tr></table>";
 
     private static String getHTML(PrintableTree node) {
         String thisData = node.getDataAsHTML();

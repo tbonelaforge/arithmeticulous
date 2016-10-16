@@ -29,9 +29,7 @@ import javax.swing.SwingConstants;
 
 public class Page extends JPanel {
     private Font labelFont;
-    private int labelFontSize;
-    private int labelFontStyle;
-    private String labelFontName;
+    private Font defaultFont;
     private GroupLayout groupLayout;
     private SequentialGroup horizontalGroup;
     private ParallelGroup verticalGroup;
@@ -47,9 +45,10 @@ public class Page extends JPanel {
         this.controllerInterface = controllerInterface;
         JLabel temp = new JLabel();
         Font exampleFont = temp.getFont();
-        labelFontStyle = exampleFont.getStyle();
-        labelFontSize = 2 * exampleFont.getSize();
-        labelFontName = exampleFont.getName();
+        int labelFontStyle = exampleFont.getStyle();
+        int labelFontSize = 2 * exampleFont.getSize();
+        String labelFontName = exampleFont.getName();
+        defaultFont = new Font(labelFontName, labelFontStyle, labelFontSize);
     }
 
     public Page(ControllerInterface controllerInterface, Page page) {
@@ -130,7 +129,7 @@ public class Page extends JPanel {
         }
 
         // Pre-order traversal for editability computation:
-        // Find the top two first, lowest level operators.
+        // Find the two first, lowest level operators.
         ViewNode thisViewNode = (ViewNode) createNodeLabel(node);
         if (node instanceof Operator) {
             if (level > editableLevel) {
@@ -140,10 +139,14 @@ public class Page extends JPanel {
         }
 
         // In-order traversal for horizontal display.
+        openParenthesis(node.getLeftChild(), node);
         ViewNode leftViewNode = traverseNode(node.getLeftChild(), level + 1);
+        closeParenthesis(node.getLeftChild(), node);
         horizontalGroup.addComponent(thisViewNode.getComponent());
         verticalGroup.addComponent(thisViewNode.getComponent());
+        openParenthesis(node.getRightChild(), node);
         ViewNode rightViewNode = traverseNode(node.getRightChild(), level + 1);
+        closeParenthesis(node.getRightChild(), node);
         thisViewNode.setLeftChild(leftViewNode);
         thisViewNode.setRightChild(rightViewNode);
         return thisViewNode;
@@ -167,24 +170,44 @@ public class Page extends JPanel {
             verticalGroup.addComponent(thisViewNode.getComponent());
             return thisViewNode;
         }
+        openParenthesis(viewNode.getNode().getLeftChild(), viewNode.getNode());
         ViewNode leftViewNode = traverseViewNode(viewNode.getLeftChild());
+        closeParenthesis(viewNode.getNode().getLeftChild(), viewNode.getNode());
         horizontalGroup.addComponent(thisViewNode.getComponent());
         verticalGroup.addComponent(thisViewNode.getComponent());
+        openParenthesis(viewNode.getNode().getRightChild(), viewNode.getNode());
         ViewNode rightViewNode = traverseViewNode(viewNode.getRightChild());
+        closeParenthesis(viewNode.getNode().getRightChild(), viewNode.getNode());
         thisViewNode.setLeftChild(leftViewNode);
         thisViewNode.setRightChild(rightViewNode);
         return thisViewNode;
     }
 
+    private void openParenthesis(Node child, Node parent) {
+        if (child != null && parent != null
+            && child.getPrecedence() < parent.getPrecedence()) {
+            JLabel label = new JLabel();
+            label.setText("(");
+            label.setFont(defaultFont);
+            horizontalGroup.addComponent(label);
+            verticalGroup.addComponent(label);
+        }
+    }
+
+    private void closeParenthesis(Node child, Node parent) {
+        if (child != null && parent != null
+            && child.getPrecedence() < parent.getPrecedence()) {
+            JLabel label = new JLabel();
+            label.setText(")");
+            label.setFont(defaultFont);
+            horizontalGroup.addComponent(label);
+            verticalGroup.addComponent(label);
+        }
+    }
 
     private NodeLabel createNodeLabel(Node node) {
         NodeLabel nodeLabel = new NodeLabel(node);
-        nodeLabel.getComponent().setFont(new Font(
-                                                 labelFontName,
-                                                 labelFontStyle,
-                                                 labelFontSize
-                                                 )
-                                        );
+        nodeLabel.getComponent().setFont(defaultFont);
         return nodeLabel;
     }
 
@@ -193,7 +216,7 @@ public class Page extends JPanel {
             return viewNode;
         }
         NodeTextField newTextField = new NodeTextField(viewNode);
-        newTextField.getComponent().setFont(new Font(labelFontName, labelFontStyle, labelFontSize));
+        newTextField.getComponent().setFont(defaultFont);
         return newTextField;
     }
 
@@ -220,10 +243,6 @@ public class Page extends JPanel {
         Frame parentFrame = controllerInterface.getFrame();
         modal = new JDialog(parentFrame, "Incorrect", true);
         modal.setLocationRelativeTo(parentFrame);
-        System.out.println("Inside Page.createModal, about to getHint, passing in viewNode:\n");
-        TreePrinter.printAsHTML(viewNode);
-        System.out.println("Inside Page.createModal, the viewNode's node looks like:\n");
-        TreePrinter.printAsHTML(viewNode.getNode());
         String hint = viewNode.getHint();
         JLabel modalLabel = new JLabel(hint);
         modalLabel.setHorizontalAlignment(SwingConstants.CENTER);

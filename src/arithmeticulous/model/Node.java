@@ -34,6 +34,10 @@ public class Node implements PrintableTree {
         throw new RuntimeException("getText not implemented for: " + this);
     }
 
+    public int getPrecedence() {
+        throw new RuntimeException("getPrecedence not implemented for: " + this);
+    }
+
     public Node evaluate() {
         throw new RuntimeException("evaluate not implemented for: " + this);
     }

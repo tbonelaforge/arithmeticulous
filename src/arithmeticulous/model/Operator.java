@@ -39,4 +39,14 @@ public class Operator extends Node {
         Natural result = new Natural(value);
         return result;
     }
+
+    public int getPrecedence() {
+        if (type == "*") {
+            return 2;
+        } else if (type == "+") {
+            return 1;
+        } else {
+            throw new RuntimeException("Precedence not defined for operator: " + type);
+        }
+    }
 }

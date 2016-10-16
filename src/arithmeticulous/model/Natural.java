@@ -28,4 +28,8 @@ public class Natural extends Node {
     public Node evaluate() {
         return this;
     }
+
+    public int getPrecedence() {
+        return 3;
+    }
 }
