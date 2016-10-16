@@ -1,16 +1,19 @@
-all: ControllerTest.class ArithmeticApp.class
+all: ArithmeticApp.class
 
-ControllerTest.class: ./arithmeticulous/controller/ControllerTest.java Page Controller ControllerInterface
-	javac ./arithmeticulous/controller/ControllerTest.java
-
-ArithmeticApp.class: ./arithmeticulous/ArithmeticApp.java Page Controller ControllerInterface
+ArithmeticApp.class: ./arithmeticulous/ArithmeticApp.java View Controller
 	javac ./arithmeticulous/ArithmeticApp.java
 
-Page: ./arithmeticulous/view/Page.java ControllerInterface
-	javac ./arithmeticulous/view/Page.java
+.PHONY: Model
 
-Controller: ./arithmeticulous/controller/Controller.java
-	javac ./arithmeticulous/controller/Controller.java
+Model:
+	cd ./arithmeticulous/model; make
 
-ControllerInterface: ./arithmeticulous/controller/ControllerInterface.java
-	javac ./arithmeticulous/controller/ControllerInterface.java
+.PHONY: View
+
+View:
+	cd ./arithmeticulous/view; make
+
+.PHONY: Controller
+
+Controller:
+	cd ./arithmeticulous/controller; make

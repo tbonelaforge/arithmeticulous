@@ -3,22 +3,18 @@ package arithmeticulous.view;
 import arithmeticulous.model.Node;
 import arithmeticulous.model.Operator;
 import arithmeticulous.model.TreePrinter;
-
 import arithmeticulous.controller.ControllerInterface;
+import arithmeticulous.view.EditableSet;
 
-import java.awt.Color;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Container;
-import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -41,13 +37,11 @@ public class Page extends JPanel {
     private ParallelGroup verticalGroup;
     private ControllerInterface controllerInterface;
     private ViewNode rootViewNode;
-    private ViewNode editable;
+    private EditableSet editableSet;
     private int editableLevel;
     private NodeTextField textField;
     private JDialog modal;
     private boolean allCorrect;
-
-    private static Color clickableColor = new Color(200, 0, 255);
 
     public Page(ControllerInterface controllerInterface) {
         this.controllerInterface = controllerInterface;
@@ -65,25 +59,16 @@ public class Page extends JPanel {
 
     public void initializeFromNode(Node rootNode) {
         initializeLayout();
+        editableSet = new EditableSet();
         rootViewNode = traverseNode(rootNode, 1);
-        if (editable != null) {
-            editable.setEditMode(EditMode.EDITABLE);
-            editable.getComponent().setForeground(clickableColor);
-            editable.getComponent().setCursor(new Cursor(Cursor.HAND_CURSOR));
-            editable.getComponent().addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent mouseEvent) {
-                    if (controllerInterface != null) {
-                        controllerInterface.edit(editable);
-                    }
-                }
-            });
+        if (editableSet.count() > 0) {
+            editableSet.prepareForEditing(controllerInterface);
         } else {
-            markCorrect();
+            markAllCorrect();
         }
     }
 
-    private void markCorrect() {
+    private void markAllCorrect() {
         ImageIcon correctIcon = null;
         String path = "images/check.png";
         String description = "answer is correct";
@@ -140,22 +125,24 @@ public class Page extends JPanel {
     }
 
     private ViewNode traverseNode(Node node, int level) {
-
-        // In-order traversal for horizontal ordering.
         if (node == null) {
             return null;
         }
-        ViewNode leftViewNode = traverseNode(node.getLeftChild(), level + 1);
-        ViewNode thisViewNode = (ViewNode) createNodeLabel(node);
-        horizontalGroup.addComponent(thisViewNode.getComponent());
-        verticalGroup.addComponent(thisViewNode.getComponent());
 
-        // Find the "max" (the first, lowest level operator)
+        // Pre-order traversal for editability computation:
+        // Find the top two first, lowest level operators.
+        ViewNode thisViewNode = (ViewNode) createNodeLabel(node);
         if (node instanceof Operator) {
             if (level > editableLevel) {
-                editable = thisViewNode;
+                editableSet.newEasiest(thisViewNode);
+                editableLevel = level;
             }
         }
+
+        // In-order traversal for horizontal display.
+        ViewNode leftViewNode = traverseNode(node.getLeftChild(), level + 1);
+        horizontalGroup.addComponent(thisViewNode.getComponent());
+        verticalGroup.addComponent(thisViewNode.getComponent());
         ViewNode rightViewNode = traverseNode(node.getRightChild(), level + 1);
         thisViewNode.setLeftChild(leftViewNode);
         thisViewNode.setRightChild(rightViewNode);
@@ -210,20 +197,14 @@ public class Page extends JPanel {
         return newTextField;
     }
 
-    /*
-    public void setControllerInterface(ControllerInterface controllerInterface) {
-        this.controllerInterface = controllerInterface;
-    }
-    */
-
     public void whenShown() {
         if (textField != null) {
             textField.getComponent().requestFocusInWindow();
         }
     }
     public void cleanUp() {
-        if (editable != null) {
-            editable.getComponent().setEnabled(false);
+        if (editableSet != null) {
+            editableSet.cleanUp();
         }
     }
 
