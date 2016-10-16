@@ -118,8 +118,8 @@ public class Page extends JPanel {
                         Point location = getLocationOnScreen();
                         System.out.printf("The location of the Page is: (%d, %d)%n", location.x, location.y);
                         System.out.printf("The height of the Page is: %d%n", getHeight());
-                        modal.pack();
                         modal.setLocation(location.x, location.y + getHeight());
+                        modal.setSize(200, 100);
                         modal.setVisible(true);
                     }
                 }
