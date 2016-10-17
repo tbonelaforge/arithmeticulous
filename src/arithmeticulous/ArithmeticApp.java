@@ -23,12 +23,9 @@ public class ArithmeticApp extends JFrame {
     private JButton quitButton;
     private long t0;
     private long t1;
-    private long totalTiming;
-    private int howManyExercisesCompleted;
-    private int howManyOperationsCompleted;
     private int operationCount;
-    private double averageExerciseTiming;
-    private double averageOperationTiming;
+    private ExerciseHistory exerciseHistory = ExerciseHistory.allocate(10);
+    private double personalBest;
 
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
@@ -83,30 +80,19 @@ public class ArithmeticApp extends JFrame {
     }
 
     public void stopTiming() {
-        howManyExercisesCompleted += 1;
-        howManyOperationsCompleted += operationCount;
         t1 = System.currentTimeMillis();
         long delta = t1 - t0;
-        totalTiming += delta;
-        System.out.printf("THAT EXERCISE HAD %d OPERATIONS AND TOOK:%n", operationCount);
-        System.out.printf("%d milliseconds%n%n", delta);
-        updateAverageExerciseTiming();
-        updateAverageOperationTiming();
-        System.out.println("THE AVERAGE TIMING PER EXERCISE IS NOW:");
-        System.out.printf("%f seconds%n%n", averageExerciseTiming / 1000);
-        System.out.println("THE AVERAGE TIMING PER OPERATION IS NOW:");
-        System.out.printf("%f seconds%n%n", averageOperationTiming / 1000);
-        System.out.printf("OPERATION RATE: %f OPS/second%n", 1000 / averageOperationTiming);
-    }
-    
-    private void updateAverageExerciseTiming() {
-        averageExerciseTiming = 1.0 * totalTiming / howManyExercisesCompleted;
+        Exercise exercise = new Exercise(operationCount, delta);
+        exerciseHistory.push(exercise);
+        System.out.printf("THAT EXERCISE HAD %d OPERATIONS AND TOOK: %f seconds%n", exercise.getOperationCount(), exercise.getDurationInSeconds());
+        double currentRate = exerciseHistory.getOperationsPerSecond();
+        if (currentRate > personalBest) {
+            personalBest = currentRate;
+        }
+        System.out.printf("CURRENT RATE: %f OPS / sec%n", exerciseHistory.getOperationsPerSecond());
+        System.out.printf("PERSONAL BEST: %f OPS / sec%n", personalBest);
     }
 
-    private void updateAverageOperationTiming() {
-        averageOperationTiming = 1.0 * totalTiming / howManyOperationsCompleted;
-    }
-    
     private void initComponents() {
         startButton = new JButton();
         quitButton = new JButton();
