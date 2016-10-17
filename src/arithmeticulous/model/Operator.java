@@ -59,4 +59,9 @@ public class Operator extends Node {
             throw new RuntimeException("Precedence not defined for operator: " + type);
         }
     }
+
+    protected boolean isOperator() {
+        System.out.println("Inside Operator.isOperator, about to return true!!!\n");
+        return true;
+    }
 }

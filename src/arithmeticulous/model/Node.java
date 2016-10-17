@@ -42,6 +42,36 @@ public class Node implements PrintableTree {
         throw new RuntimeException("evaluate not implemented for: " + this);
     }
 
+    public int countOperators() {
+        int leftOperators = 0;
+        int rightOperators = 0;
+
+        if (getLeftChild() != null) {
+            leftOperators = getLeftChild().countOperators();
+        }
+        if (getRightChild() != null) {
+            rightOperators = getRightChild().countOperators();
+        }
+        int count = leftOperators + rightOperators;
+        if (isOperator()) {
+            System.out.println("Inside Node.countOperators, realized this is an operator!\n");
+            count += 1;
+        } else {
+            System.out.println("Inside Node.countOperators, I don't think this is an operator!!!\n");
+        }
+        if (this instanceof Operator) {
+            System.out.printf("Inside Node.countOperators, for an OPERATOR about to return count of: %d%n", count);
+        } else {
+            System.out.printf("Inside Node.countOperators, for a NON-OPERATOR, about to return count of: %d%n", count);
+        }
+        return count;
+    }
+
+    protected boolean isOperator() {
+        System.out.println("Inside Node.isOperator, about to return false!\n");
+        return false;
+    }
+
     public Node replace(Node target, Node replacement) {
         if (this == target) {
             return replacement;

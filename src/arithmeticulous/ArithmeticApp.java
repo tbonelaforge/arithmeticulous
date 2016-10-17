@@ -25,7 +25,10 @@ public class ArithmeticApp extends JFrame {
     private long t1;
     private long totalTiming;
     private int howManyExercisesCompleted;
-    private double averageTiming;
+    private int howManyOperationsCompleted;
+    private int operationCount;
+    private double averageExerciseTiming;
+    private double averageOperationTiming;
 
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
@@ -43,8 +46,8 @@ public class ArithmeticApp extends JFrame {
 
     public Node makeExpression() {
         Node expression;
-        //expression = NodeGenerator.generateEasyExpression();
-        expression = NodeGenerator.generateMediumExpression();
+        expression = NodeGenerator.generateEasyExpression();
+        //expression = NodeGenerator.generateMediumExpression();
         //expression = NodeGenerator.generateEasyOrMediumExpression();
         //expression = NodeGenerator.generateEasyOrMediumOrHardExpression();
         /*
@@ -74,19 +77,34 @@ public class ArithmeticApp extends JFrame {
         return expression;
     }
 
-    public void startTiming() {
+    public void startTiming(int operationCount) {
+        this.operationCount = operationCount;
         t0 = System.currentTimeMillis();
     }
 
     public void stopTiming() {
         howManyExercisesCompleted += 1;
+        howManyOperationsCompleted += operationCount;
         t1 = System.currentTimeMillis();
         long delta = t1 - t0;
-        System.out.println("THAT EXERCISE TOOK:");
+        totalTiming += delta;
+        System.out.printf("THAT EXERCISE HAD %d OPERATIONS AND TOOK:%n", operationCount);
         System.out.printf("%d milliseconds%n%n", delta);
-        averageTiming = (1.0 * (howManyExercisesCompleted - 1) * averageTiming + delta) / howManyExercisesCompleted;
+        updateAverageExerciseTiming();
+        updateAverageOperationTiming();
         System.out.println("THE AVERAGE TIMING PER EXERCISE IS NOW:");
-        System.out.printf("%f seconds%n%n", averageTiming / 1000);
+        System.out.printf("%f seconds%n%n", averageExerciseTiming / 1000);
+        System.out.println("THE AVERAGE TIMING PER OPERATION IS NOW:");
+        System.out.printf("%f seconds%n%n", averageOperationTiming / 1000);
+        System.out.printf("OPERATION RATE: %f OPS/second%n", 1000 / averageOperationTiming);
+    }
+    
+    private void updateAverageExerciseTiming() {
+        averageExerciseTiming = 1.0 * totalTiming / howManyExercisesCompleted;
+    }
+
+    private void updateAverageOperationTiming() {
+        averageOperationTiming = 1.0 * totalTiming / howManyOperationsCompleted;
     }
     
     private void initComponents() {
@@ -99,7 +117,7 @@ public class ArithmeticApp extends JFrame {
             public void actionPerformed(ActionEvent event) {
                 Controller controller = makeNewController();
                 Node expression = makeExpression();
-                startTiming();
+                startTiming(expression.countOperators());
                 controller.initialize(expression);
             }
         });

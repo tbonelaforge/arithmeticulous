@@ -13,9 +13,11 @@ import java.awt.event.ActionEvent;
 import java.awt.Frame;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
+import java.awt.GridLayout;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 public class Controller implements ControllerInterface {
     private Node model;
@@ -51,8 +53,7 @@ public class Controller implements ControllerInterface {
         }
         contentPane.add(newView, endRow());
         view = newView;
-        addPlayAgainButton();
-        addQuitButton();
+        addButtons();
         if (view.isAllCorrect()) {
             app.stopTiming();
         }
@@ -88,11 +89,19 @@ public class Controller implements ControllerInterface {
 
     private Page generateNewView(Page currentView) {
         Page view = new Page(this, currentView);
-        //view.setControllerInterface(this);
         return view;
     }
 
-    private void addPlayAgainButton() {
+    private void addButtons() {
+        GridLayout gridLayout = new GridLayout(2, 1);
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(gridLayout);
+        addPlayAgainButton(buttonPanel);
+        addQuitButton(buttonPanel);
+        contentPane.add(buttonPanel, endRow());
+    }
+
+    private void addPlayAgainButton(JPanel panel) {
         playAgainButton = new JButton();
         playAgainButton.setText("Play Again");
         playAgainButton.addActionListener(new ActionListener() {
@@ -100,15 +109,15 @@ public class Controller implements ControllerInterface {
                 if (app != null) {
                     Node newExpression = app.makeExpression();
                     initialize(newExpression);
-                    app.startTiming();
+                    app.startTiming(newExpression.countOperators());
                 }
             }
         });
         playAgainButton.setVisible(view.isAllCorrect());
-        contentPane.add(playAgainButton, endRow());
+        panel.add(playAgainButton);
     }
 
-    private void addQuitButton() {
+    private void addQuitButton(JPanel panel) {
         quitButton = new JButton();
         quitButton.setText("Quit");
         quitButton.addActionListener(new ActionListener() {
@@ -117,7 +126,7 @@ public class Controller implements ControllerInterface {
             };
         });
         quitButton.setVisible(view.isAllCorrect());
-        contentPane.add(quitButton, endRow());
+        panel.add(quitButton);
     }
 
     private GridBagConstraints endRow() {

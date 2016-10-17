@@ -1,6 +1,6 @@
 all: ArithmeticApp.class
 
-ArithmeticApp.class: ./arithmeticulous/ArithmeticApp.java View Controller
+ArithmeticApp.class: ./arithmeticulous/ArithmeticApp.java Model View Controller
 	javac ./arithmeticulous/ArithmeticApp.java
 
 .PHONY: Model
