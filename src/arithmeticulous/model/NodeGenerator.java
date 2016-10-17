@@ -15,6 +15,99 @@ public class NodeGenerator {
         return g.generate();
     }
 
+    public static Node generateEasyExpression() {
+        String expressionKey;
+        if (Math.random() < 0.5) {
+            expressionKey = "*<+";
+        } else {
+            expressionKey = "+>*";
+        }
+        return generateEasyExpression(expressionKey);
+    }
+
+    public static Node generateMediumExpression() {
+        String expressionKey;
+        if (Math.random() < 0.5) {
+            expressionKey = "+<*";
+        } else {
+            expressionKey = "*>+";
+        }
+        return generateMediumExpression(expressionKey);
+    }
+
+    public static Node generateEasyOrMediumExpression() {
+        String expressionKey;
+        if (Math.random() < 0.5) {
+            return generateEasyExpression();
+        } else {
+            return generateMediumExpression();
+        }
+    }
+
+    public static Node generateEasyOrMediumOrHardExpression() {
+        return generateRandomExpression(2);
+    }
+
+    public static Node generateEasyExpression(String expressionKey) {
+        Node expression;
+        if (expressionKey.equals("*<+")) {
+            Node node1 = new Natural(pickRandomInt(2, 5));
+            Node node3 = new Natural(pickRandomInt(2, 5));
+            Node node2 = new Operator("*");
+            node2.setLeftChild(node1);
+            node2.setRightChild(node3);
+            Node node4 = new Natural(pickRandomInt(1, 9));
+            Node node5 = new Operator("+");
+            node5.setLeftChild(node4);
+            node5.setRightChild(node2);
+            expression = node5;
+        } else if (expressionKey.equals("+>*")) {
+            Node node1 = new Natural(pickRandomInt(2, 5));
+            Node node3 = new Natural(pickRandomInt(2, 5));
+            Node node2 = new Operator("*");
+            node2.setLeftChild(node1);
+            node2.setRightChild(node3);
+            Node node4 = new Natural(pickRandomInt(1, 9));
+            Node node5 = new Operator("+");
+            node5.setLeftChild(node2);
+            node5.setRightChild(node4);
+            expression = node5;
+        } else {
+            throw new RuntimeException("Inside generateEasyExpression, expression key not recognized: " + expressionKey);
+        }
+        return expression;
+    }
+
+    public static Node generateMediumExpression(String expressionKey) {
+        Node expression;
+        if (expressionKey.equals("+<*")) {
+            Node node1 = new Natural(pickRandomInt(1, 9));
+            Node node3 = new Natural(pickRandomInt(1, 9));
+            Node node2 = new Operator("+");
+            node2.setLeftChild(node1);
+            node2.setRightChild(node3);
+            Node node4 = new Natural(pickRandomInt(2, 5));
+            Node node5 = new Operator("*");
+            node5.setLeftChild(node2);
+            node5.setRightChild(node4);
+            expression = node5;
+        } else if (expressionKey.equals("*>+")) {
+            Node node1 = new Natural(pickRandomInt(1, 9));
+            Node node3 = new Natural(pickRandomInt(1, 9));
+            Node node2 = new Operator("+");
+            node2.setLeftChild(node1);
+            node2.setRightChild(node3);
+            Node node4 = new Natural(pickRandomInt(2, 5));
+            Node node5 = new Operator("*");
+            node5.setLeftChild(node4);
+            node5.setRightChild(node2);
+            expression = node5;
+        } else {
+            throw new RuntimeException("Inside generateMediumExpression, expression key not recognized: " + expressionKey);
+        }
+        return expression;
+    }
+
     public Node generate() {
         int level = 0;
         Node a = (Node) generateRandomNatural();

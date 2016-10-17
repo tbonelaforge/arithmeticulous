@@ -11,7 +11,7 @@ public class EditableSet {
     private ViewNode easyEditable;
     private ViewNode hardEditable;
 
-    private static Color easyColor = new Color(20, 255, 20);
+    private static Color easyColor = new Color(20, 200, 20);
     private static Color hardColor = new Color(200, 0, 255);
    
     public int count() {

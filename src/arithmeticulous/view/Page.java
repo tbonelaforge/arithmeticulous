@@ -139,14 +139,27 @@ public class Page extends JPanel {
         }
 
         // In-order traversal for horizontal display.
-        openParenthesis(node.getLeftChild(), node);
+        JLabel leftParen = null;
+        JLabel rightParen = null;
+        leftParen = openParenthesis(node.getLeftChild(), node);
         ViewNode leftViewNode = traverseNode(node.getLeftChild(), level + 1);
-        closeParenthesis(node.getLeftChild(), node);
+        rightParen = closeParenthesis(node.getLeftChild(), node);
+        if (leftViewNode != null) {
+            leftViewNode.setLeftParen(leftParen);
+            leftViewNode.setRightParen(rightParen);
+        }
+
         horizontalGroup.addComponent(thisViewNode.getComponent());
         verticalGroup.addComponent(thisViewNode.getComponent());
-        openParenthesis(node.getRightChild(), node);
+
+        leftParen = openParenthesis(node.getRightChild(), node);
         ViewNode rightViewNode = traverseNode(node.getRightChild(), level + 1);
-        closeParenthesis(node.getRightChild(), node);
+        rightParen = closeParenthesis(node.getRightChild(), node);
+        if (rightViewNode != null) {
+            rightViewNode.setLeftParen(leftParen);
+            rightViewNode.setRightParen(rightParen);
+        }
+
         thisViewNode.setLeftChild(leftViewNode);
         thisViewNode.setRightChild(rightViewNode);
         return thisViewNode;
@@ -160,7 +173,7 @@ public class Page extends JPanel {
         }
         ViewNode thisViewNode = createViewNode(viewNode);
         if (thisViewNode instanceof NodeTextField) {
-            int width = viewNode.computeWidth();
+            int width = viewNode.computeWidth(ViewNode.NO_PARENS);
             textField = (NodeTextField) thisViewNode;
             horizontalGroup.addComponent(thisViewNode.getComponent(),
                                          width,
@@ -170,20 +183,33 @@ public class Page extends JPanel {
             verticalGroup.addComponent(thisViewNode.getComponent());
             return thisViewNode;
         }
-        openParenthesis(viewNode.getNode().getLeftChild(), viewNode.getNode());
+        JLabel leftParen = null;
+        JLabel rightParen = null;
+        leftParen = openParenthesis(viewNode.getNode().getLeftChild(), viewNode.getNode());
         ViewNode leftViewNode = traverseViewNode(viewNode.getLeftChild());
-        closeParenthesis(viewNode.getNode().getLeftChild(), viewNode.getNode());
+        rightParen = closeParenthesis(viewNode.getNode().getLeftChild(), viewNode.getNode());
+        if (leftViewNode != null) {
+            leftViewNode.setLeftParen(leftParen);
+            leftViewNode.setRightParen(rightParen);
+        }
+
         horizontalGroup.addComponent(thisViewNode.getComponent());
         verticalGroup.addComponent(thisViewNode.getComponent());
-        openParenthesis(viewNode.getNode().getRightChild(), viewNode.getNode());
+
+        leftParen = openParenthesis(viewNode.getNode().getRightChild(), viewNode.getNode());
         ViewNode rightViewNode = traverseViewNode(viewNode.getRightChild());
-        closeParenthesis(viewNode.getNode().getRightChild(), viewNode.getNode());
+        rightParen = closeParenthesis(viewNode.getNode().getRightChild(), viewNode.getNode());
+        if (rightViewNode != null) {
+            rightViewNode.setLeftParen(leftParen);
+            rightViewNode.setRightParen(rightParen);
+        }
+
         thisViewNode.setLeftChild(leftViewNode);
         thisViewNode.setRightChild(rightViewNode);
         return thisViewNode;
     }
 
-    private void openParenthesis(Node child, Node parent) {
+    private JLabel openParenthesis(Node child, Node parent) {
         if (child != null && parent != null
             && child.getPrecedence() < parent.getPrecedence()) {
             JLabel label = new JLabel();
@@ -191,10 +217,13 @@ public class Page extends JPanel {
             label.setFont(defaultFont);
             horizontalGroup.addComponent(label);
             verticalGroup.addComponent(label);
+            return label;
+        } else {
+            return null;
         }
     }
 
-    private void closeParenthesis(Node child, Node parent) {
+    private JLabel closeParenthesis(Node child, Node parent) {
         if (child != null && parent != null
             && child.getPrecedence() < parent.getPrecedence()) {
             JLabel label = new JLabel();
@@ -202,6 +231,9 @@ public class Page extends JPanel {
             label.setFont(defaultFont);
             horizontalGroup.addComponent(label);
             verticalGroup.addComponent(label);
+            return label;
+        } else {
+            return null;
         }
     }
 

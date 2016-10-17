@@ -32,6 +32,7 @@ public class NodeTextField extends ViewNode implements FocusListener, ActionList
         textField.setBorder(BorderFactory.createEmptyBorder());
         textField.addFocusListener(this);
         textField.addActionListener(this);
+        textField.setText(getNode().getText());
     }
 
     public String getDataAsHTML() {
@@ -51,22 +52,12 @@ public class NodeTextField extends ViewNode implements FocusListener, ActionList
     }
 
     public void focusGained(FocusEvent focusEvent) {
-        System.out.println("the text field gained focus!!!\n");
-        System.out.println("The underlying node is:\n");
-        TreePrinter.printAsHTML(getNode());
-        System.out.println("The node.getText() is:\n" + getNode().getText());
         textField.setText(getNode().getText());
-        System.out.println("After setting the text, the text is:\n");
-        System.out.println(textField.getText());
         textField.selectAll();
-        System.out.println("After selecting all, the NodeTextField has Font:\n");
-        System.out.println(textField.getFont());
     }
 
     public void actionPerformed(ActionEvent actionEvent) {
-        System.out.println("Inside actionPerformed, got called!!!!\n");
         if (onSubmit != null) {
-            System.out.println("Inside actionPerformed, determined that onSubmit is not null, about to run it!\n");
             onSubmit.run();
         }
     }

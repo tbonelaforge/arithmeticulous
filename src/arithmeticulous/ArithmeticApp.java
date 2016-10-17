@@ -21,6 +21,11 @@ public class ArithmeticApp extends JFrame {
     
     private JButton startButton;
     private JButton quitButton;
+    private long t0;
+    private long t1;
+    private long totalTiming;
+    private int howManyExercisesCompleted;
+    private double averageTiming;
 
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
@@ -37,7 +42,11 @@ public class ArithmeticApp extends JFrame {
     }
 
     public Node makeExpression() {
-        Node expression = NodeGenerator.generateRandomExpression(2);
+        Node expression;
+        //expression = NodeGenerator.generateEasyExpression();
+        expression = NodeGenerator.generateMediumExpression();
+        //expression = NodeGenerator.generateEasyOrMediumExpression();
+        //expression = NodeGenerator.generateEasyOrMediumOrHardExpression();
         /*
         Node node1 = new Natural(getRandomInt(2, 5));
         Node node3 = new Natural(getRandomInt(2, 5));
@@ -64,6 +73,21 @@ public class ArithmeticApp extends JFrame {
         */
         return expression;
     }
+
+    public void startTiming() {
+        t0 = System.currentTimeMillis();
+    }
+
+    public void stopTiming() {
+        howManyExercisesCompleted += 1;
+        t1 = System.currentTimeMillis();
+        long delta = t1 - t0;
+        System.out.println("THAT EXERCISE TOOK:");
+        System.out.printf("%d milliseconds%n%n", delta);
+        averageTiming = (1.0 * (howManyExercisesCompleted - 1) * averageTiming + delta) / howManyExercisesCompleted;
+        System.out.println("THE AVERAGE TIMING PER EXERCISE IS NOW:");
+        System.out.printf("%f seconds%n%n", averageTiming / 1000);
+    }
     
     private void initComponents() {
         startButton = new JButton();
@@ -75,6 +99,7 @@ public class ArithmeticApp extends JFrame {
             public void actionPerformed(ActionEvent event) {
                 Controller controller = makeNewController();
                 Node expression = makeExpression();
+                startTiming();
                 controller.initialize(expression);
             }
         });

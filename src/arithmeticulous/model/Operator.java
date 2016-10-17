@@ -21,7 +21,17 @@ public class Operator extends Node {
     }
 
     public String getText() {
-        String text = getLeftChild().getText() + type + getRightChild().getText();
+        Node leftChild = getLeftChild();
+        Node rightChild = getRightChild();
+        String leftChildText = leftChild.getText();
+        String rightChildText = rightChild.getText();
+        if (leftChild.getPrecedence() < getPrecedence()) {
+            leftChildText = "(" + leftChildText + ")";
+        }
+        if (rightChild.getPrecedence() < getPrecedence()) {
+            rightChildText = "(" + rightChildText + ")";
+        }
+        String text = leftChildText + type + rightChildText;
         return text;
     }
 

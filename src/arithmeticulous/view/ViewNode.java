@@ -4,14 +4,21 @@ import arithmeticulous.model.Node;
 import arithmeticulous.model.Natural;
 import arithmeticulous.model.Operator;
 import arithmeticulous.model.PrintableTree;
+import arithmeticulous.model.TreePrinter;
 
 import java.awt.Component;
+import javax.swing.JLabel;
 
 public class ViewNode implements PrintableTree {
     private ViewNode leftChild;
     private ViewNode rightChild;
     private EditMode editMode;
     private Node node;
+    private JLabel leftParen;
+    private JLabel rightParen;
+
+    public static boolean YES_PARENS = true;
+    public static boolean NO_PARENS = false;
 
     public ViewNode(Node node) {
         this.node = node;
@@ -45,12 +52,27 @@ public class ViewNode implements PrintableTree {
         this.editMode = editMode;
     }
 
-    public int computeWidth() {
-        int thisWidth = getComponent().getWidth();
-        int leftWidth = ( leftChild != null ) ? leftChild.computeWidth() : 0;
-        int rightWidth = ( rightChild != null ) ? rightChild.computeWidth() : 0;
-        int computedWidth = leftWidth + thisWidth + rightWidth;
+    public void setLeftParen(JLabel leftParen) {
+        this.leftParen = leftParen;
+    }
 
+    public void setRightParen(JLabel rightParen) {
+        this.rightParen = rightParen;
+    }
+
+    public int computeWidth(boolean shouldIncludeParens) {
+        int thisWidth = getComponent().getWidth();
+        int leftWidth = ( leftChild != null ) ? leftChild.computeWidth(YES_PARENS) : 0;
+        int rightWidth = ( rightChild != null ) ? rightChild.computeWidth(YES_PARENS) : 0;
+        int computedWidth = leftWidth + thisWidth + rightWidth;
+        if (shouldIncludeParens == YES_PARENS) {
+            if (leftParen != null) {
+                computedWidth += leftParen.getWidth();
+            }
+            if (rightParen != null) {
+                computedWidth += rightParen.getWidth();
+            }
+        }
         return computedWidth;
     }
 

@@ -53,6 +53,9 @@ public class Controller implements ControllerInterface {
         view = newView;
         addPlayAgainButton();
         addQuitButton();
+        if (view.isAllCorrect()) {
+            app.stopTiming();
+        }
         contentPane.revalidate();
         contentPane.repaint();
         newView.whenShown();
@@ -94,10 +97,10 @@ public class Controller implements ControllerInterface {
         playAgainButton.setText("Play Again");
         playAgainButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
-                System.out.println("THE USER WANTS TO PLAY AGAIN!!!\n");
                 if (app != null) {
                     Node newExpression = app.makeExpression();
                     initialize(newExpression);
+                    app.startTiming();
                 }
             }
         });
